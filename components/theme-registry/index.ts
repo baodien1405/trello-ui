@@ -1,1 +1,1 @@
-export { default } from "./theme-registry";
+export { default } from './theme-registry'
