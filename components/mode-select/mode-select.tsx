@@ -1,9 +1,13 @@
 'use client'
 
+import DarkModeIcon from '@mui/icons-material/DarkMode'
+import LightModeIcon from '@mui/icons-material/LightMode'
+import SettingsBrightnessIcon from '@mui/icons-material/SettingsBrightness'
+import FormControl from '@mui/material/FormControl'
 import InputLabel from '@mui/material/InputLabel'
 import MenuItem from '@mui/material/MenuItem'
-import FormControl from '@mui/material/FormControl'
 import Select, { SelectChangeEvent } from '@mui/material/Select'
+import Stack from '@mui/material/Stack'
 import { useColorScheme } from '@mui/material/styles'
 
 type Mode = 'light' | 'dark' | 'system'
@@ -26,9 +30,24 @@ export default function ModeSelect() {
         label="Mode"
         onChange={handleModeChange}
       >
-        <MenuItem value="light">Light</MenuItem>
-        <MenuItem value="dark">Dark</MenuItem>
-        <MenuItem value="system">System</MenuItem>
+        <MenuItem value="light">
+          <Stack direction="row" alignItems="center" gap={1}>
+            <LightModeIcon fontSize="small" />
+            Light
+          </Stack>
+        </MenuItem>
+        <MenuItem value="dark">
+          <Stack direction="row" alignItems="center" gap={1}>
+            <DarkModeIcon fontSize="small" />
+            Dark
+          </Stack>
+        </MenuItem>
+        <MenuItem value="system">
+          <Stack direction="row" alignItems="center" gap={1}>
+            <SettingsBrightnessIcon fontSize="small" />
+            System
+          </Stack>
+        </MenuItem>
       </Select>
     </FormControl>
   )
