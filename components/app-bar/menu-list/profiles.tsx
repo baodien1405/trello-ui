@@ -33,7 +33,7 @@ export function Profiles() {
           aria-expanded={open ? 'true' : undefined}
         >
           <Avatar
-            sx={{ width: 30, height: 30 }}
+            sx={{ width: 34, height: 34 }}
             alt="avatar"
             src="https://graph.facebook.com/1325702547590327/picture?width=400&height=400"
           />

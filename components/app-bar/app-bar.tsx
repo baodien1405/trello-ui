@@ -1,14 +1,16 @@
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
-import AppsIcon from '@mui/icons-material/Apps'
 import SvgIcon from '@mui/material/SvgIcon'
 import Badge from '@mui/material/Badge'
 import Stack from '@mui/material/Stack'
 import TextField from '@mui/material/TextField'
 import Tooltip from '@mui/material/Tooltip'
 import Typography from '@mui/material/Typography'
-import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone'
+
+import AppsIcon from '@mui/icons-material/Apps'
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline'
+import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone'
+import LibraryAddIcon from '@mui/icons-material/LibraryAdd'
 
 import ModeSelect from '@/components/mode-select'
 import { TrelloIcon } from '@/icons'
@@ -17,7 +19,6 @@ import { Profiles, Recent, Starred, Templates, Workspaces } from './menu-list'
 export default function AppBar() {
   return (
     <Box
-      px={2}
       sx={{
         display: 'flex',
         alignItems: 'center',
@@ -25,6 +26,7 @@ export default function AppBar() {
         height: (theme) => theme.trello.appBarHeight,
         width: '100%',
         gap: 2,
+        px: 2,
         overflowX: 'auto'
       }}
     >
@@ -48,7 +50,9 @@ export default function AppBar() {
           <Templates />
         </Box>
 
-        <Button variant="outlined">Create</Button>
+        <Button variant="outlined" startIcon={<LibraryAddIcon />}>
+          Create
+        </Button>
       </Stack>
 
       <Stack direction="row" alignItems="center" gap={2}>
