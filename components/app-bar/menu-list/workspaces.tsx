@@ -9,7 +9,7 @@ import Typography from '@mui/material/Typography'
 import ContentCut from '@mui/icons-material/ContentCut'
 import ContentCopy from '@mui/icons-material/ContentCopy'
 import ContentPaste from '@mui/icons-material/ContentPaste'
-import Cloud from '@mui/icons-material/Cloud'
+import CloudIcon from '@mui/icons-material/Cloud'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 
 export function Workspaces() {
@@ -75,7 +75,7 @@ export function Workspaces() {
         <Divider />
         <MenuItem>
           <ListItemIcon>
-            <Cloud fontSize="small" />
+            <CloudIcon fontSize="small" />
           </ListItemIcon>
           <ListItemText>Web Clipboard</ListItemText>
         </MenuItem>
