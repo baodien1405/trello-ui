@@ -1,7 +1,11 @@
 import Box from '@mui/material/Box'
 import { Card } from '../card'
 
-export function CardList() {
+interface CardListProps {
+  cardList: any[]
+}
+
+export function CardList({ cardList }: CardListProps) {
   return (
     <Box
       sx={{
@@ -24,17 +28,9 @@ export function CardList() {
         }
       }}
     >
-      <Card />
-      <Card hideMedia />
-      <Card hideMedia />
-      <Card hideMedia />
-      <Card hideMedia />
-      <Card hideMedia />
-      <Card hideMedia />
-      <Card hideMedia />
-      <Card hideMedia />
-      <Card hideMedia />
-      <Card hideMedia />
+      {cardList?.map((card) => (
+        <Card key={card?._id} card={card} />
+      ))}
     </Box>
   )
 }

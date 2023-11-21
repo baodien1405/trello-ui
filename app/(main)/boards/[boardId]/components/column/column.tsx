@@ -18,10 +18,17 @@ import Typography from '@mui/material/Typography'
 import { MouseEvent, useState } from 'react'
 
 import { CardList } from '../card-list'
+import { mapOrder } from '@/utils'
 
-export function Column() {
+interface ColumnProps {
+  column: any
+}
+
+export function Column({ column }: ColumnProps) {
   const [anchorEl, setAnchorEl] = useState<null | SVGSVGElement>(null)
   const open = Boolean(anchorEl)
+
+  const orderedCardList = mapOrder(column?.cards, column?.cardOrderIds, '_id')
 
   const handleClick = (event: MouseEvent<SVGSVGElement>) => {
     setAnchorEl(event.currentTarget)
@@ -53,7 +60,7 @@ export function Column() {
         }}
       >
         <Typography variant="h6" sx={{ fontSize: '1rem', fontWeight: 'bold', cursor: 'pointer' }}>
-          Column Title
+          {column?.title}
         </Typography>
         <Box>
           <Tooltip title="More options">
@@ -116,7 +123,7 @@ export function Column() {
         </Box>
       </Box>
 
-      <CardList />
+      <CardList cardList={orderedCardList} />
 
       {/* Column Footer */}
       <Box

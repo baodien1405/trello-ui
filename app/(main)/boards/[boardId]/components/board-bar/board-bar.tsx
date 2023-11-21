@@ -12,6 +12,7 @@ import AddToDriveIcon from '@mui/icons-material/AddToDrive'
 import BoltIcon from '@mui/icons-material/Bolt'
 import FilterListIcon from '@mui/icons-material/FilterList'
 import PersonAddIcon from '@mui/icons-material/PersonAdd'
+import { capitalize } from '@mui/material'
 
 const MENU_STYLES = {
   color: 'white',
@@ -27,7 +28,11 @@ const MENU_STYLES = {
   }
 }
 
-export function BoardBar() {
+interface BoardBarProps {
+  board: any
+}
+
+export function BoardBar({ board }: BoardBarProps) {
   return (
     <Box
       sx={{
@@ -46,8 +51,8 @@ export function BoardBar() {
       }}
     >
       <Stack direction="row" alignItems="center" gap={2}>
-        <Chip sx={MENU_STYLES} icon={<DashboardIcon />} label="Trello Stack Board" clickable />
-        <Chip sx={MENU_STYLES} icon={<VpnLockIcon />} label="Public/Private Workspace" clickable />
+        <Chip sx={MENU_STYLES} icon={<DashboardIcon />} label={board?.title} clickable />
+        <Chip sx={MENU_STYLES} icon={<VpnLockIcon />} label={capitalize(board?.type)} clickable />
         <Chip sx={MENU_STYLES} icon={<AddToDriveIcon />} label="Add to Google Drive" clickable />
         <Chip sx={MENU_STYLES} icon={<BoltIcon />} label="Automation" clickable />
         <Chip sx={MENU_STYLES} icon={<FilterListIcon />} label="Filters" clickable />

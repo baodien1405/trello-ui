@@ -4,7 +4,11 @@ import NoteAddIcon from '@mui/icons-material/NoteAdd'
 
 import { Column } from '../column'
 
-export function ColumnList() {
+interface ColumnListProps {
+  columnList: any[]
+}
+
+export function ColumnList({ columnList }: ColumnListProps) {
   return (
     <Box
       sx={{
@@ -19,9 +23,9 @@ export function ColumnList() {
         }
       }}
     >
-      <Column />
-      <Column />
-      <Column />
+      {columnList?.map((column) => (
+        <Column key={column._id} column={column} />
+      ))}
 
       <Box
         sx={{
