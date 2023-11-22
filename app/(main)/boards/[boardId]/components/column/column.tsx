@@ -19,12 +19,24 @@ import { MouseEvent, useState } from 'react'
 
 import { CardList } from '../card-list'
 import { mapOrder } from '@/utils'
+import { useSortable } from '@dnd-kit/sortable'
+import { CSS } from '@dnd-kit/utilities'
 
 interface ColumnProps {
   column: any
 }
 
 export function Column({ column }: ColumnProps) {
+  const { attributes, listeners, setNodeRef, transform, transition } = useSortable({
+    id: column._id,
+    data: { ...column }
+  })
+
+  const dndKitColumnStyles = {
+    transform: CSS.Translate.toString(transform),
+    transition
+  }
+
   const [anchorEl, setAnchorEl] = useState<null | SVGSVGElement>(null)
   const open = Boolean(anchorEl)
 
@@ -39,6 +51,10 @@ export function Column({ column }: ColumnProps) {
 
   return (
     <Box
+      ref={setNodeRef}
+      style={dndKitColumnStyles}
+      {...attributes}
+      {...listeners}
       sx={{
         minWidth: '300px',
         maxWidth: '300px',
