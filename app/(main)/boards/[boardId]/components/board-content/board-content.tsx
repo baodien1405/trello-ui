@@ -7,6 +7,7 @@ import {
   DropAnimation,
   MouseSensor,
   TouchSensor,
+  closestCorners,
   defaultDropAnimationSideEffects,
   useSensor,
   useSensors
@@ -48,6 +49,7 @@ export function BoardContent({ board }: BoardContentProps) {
   const [activeDragItemId, setActiveDragItemId] = useState<string | null>(null)
   const [activeDragItemType, setActiveDragItemType] = useState<string | null>(null)
   const [activeDragItemData, setActiveDragItemData] = useState<any>(null)
+  const [oldColumnWhenDraggingCard, setOldColumnWhenDraggingCard] = useState<any>(null)
 
   const customDropAnimation: DropAnimation = {
     sideEffects: defaultDropAnimationSideEffects({
@@ -77,6 +79,10 @@ export function BoardContent({ board }: BoardContentProps) {
         : ACTIVE_DRAG_ITEM_TYPE.COLUMN
     )
     setActiveDragItemData(event?.active?.data?.current)
+
+    if (event?.active?.data?.current?.columnId) {
+      setOldColumnWhenDraggingCard(findColumnByCardId(event?.active?.id))
+    }
   }
 
   const handleDragOver = (event: DragEndEvent) => {
@@ -150,30 +156,70 @@ export function BoardContent({ board }: BoardContentProps) {
   }
 
   const handleDragEnd = (event: DragEndEvent) => {
-    if (activeDragItemType === ACTIVE_DRAG_ITEM_TYPE.CARD) return
-
     const { active, over } = event
 
     if (!active || !over) return
 
-    if (active.id !== over.id) {
-      const oldIndex = orderedColumnList.findIndex((column) => column._id === active.id)
-      const newIndex = orderedColumnList.findIndex((column) => column._id === over.id)
+    if (activeDragItemType === ACTIVE_DRAG_ITEM_TYPE.CARD) {
+      const {
+        id: activeDraggingCardId,
+        data: { current: activeDraggingCardData }
+      } = active
+      const { id: overCardId } = over
 
-      const dndOrderedColumnList = arrayMove(orderedColumnList, oldIndex, newIndex)
-      // call API to update columnOrderIds with dndOrderedColumnListIds
-      // const dndOrderedColumnListIds = dndOrderedColumnList.map((column) => column._id)
-      setOrderedColumnList(dndOrderedColumnList)
+      const activeColumn = findColumnByCardId(activeDraggingCardId)
+      const overColumn = findColumnByCardId(overCardId)
+
+      if (!activeColumn || !overColumn) return
+
+      if (oldColumnWhenDraggingCard._id !== overColumn._id) {
+        console.log('dragging card between different column')
+      } else {
+        // dragging card in the same column
+        const oldCardIndex = oldColumnWhenDraggingCard?.cards?.findIndex(
+          (card: any) => card._id === activeDragItemId
+        )
+        const newCardIndex = overColumn.cards.findIndex((card: any) => card._id === overCardId)
+        const dndOrderedCardList = arrayMove(
+          oldColumnWhenDraggingCard?.cards,
+          oldCardIndex,
+          newCardIndex
+        )
+
+        setOrderedColumnList((prevColumnList) => {
+          const nextColumnList = cloneDeep(prevColumnList)
+          const targetColumn = nextColumnList.find((column) => column._id === overColumn._id)
+
+          targetColumn.cards = dndOrderedCardList
+          targetColumn.cardOrderIds = dndOrderedCardList.map((card: any) => card._id)
+
+          return nextColumnList
+        })
+      }
+    }
+
+    if (activeDragItemType === ACTIVE_DRAG_ITEM_TYPE.COLUMN) {
+      if (active.id !== over.id) {
+        const oldColumnIndex = orderedColumnList.findIndex((column) => column._id === active.id)
+        const newColumnIndex = orderedColumnList.findIndex((column) => column._id === over.id)
+
+        const dndOrderedColumnList = arrayMove(orderedColumnList, oldColumnIndex, newColumnIndex)
+        // call API to update columnOrderIds with dndOrderedColumnListIds
+        // const dndOrderedColumnListIds = dndOrderedColumnList.map((column) => column._id)
+        setOrderedColumnList(dndOrderedColumnList)
+      }
     }
 
     setActiveDragItemId(null)
     setActiveDragItemType(null)
     setActiveDragItemData(null)
+    setOldColumnWhenDraggingCard(null)
   }
 
   return (
     <DndContext
       sensors={sensors}
+      collisionDetection={closestCorners}
       onDragStart={handleDragStart}
       onDragOver={handleDragOver}
       onDragEnd={handleDragEnd}
