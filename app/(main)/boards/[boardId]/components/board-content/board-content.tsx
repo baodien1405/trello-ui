@@ -23,7 +23,7 @@ import { arrayMove } from '@dnd-kit/sortable'
 import cloneDeep from 'lodash.clonedeep'
 
 import { ColumnList } from '../column-list'
-import { mapOrder } from '@/utils'
+import { generatePlaceholderCard, mapOrder } from '@/utils'
 import { Column, Card } from '../../components'
 
 const ACTIVE_DRAG_ITEM_TYPE = {
@@ -145,6 +145,11 @@ export function BoardContent({ board }: BoardContentProps) {
           (card: any) => card._id !== activeDraggingCardId
         )
 
+        // add placeholder card if column is empty
+        if (nextActiveColumn.cards.length === 0) {
+          nextActiveColumn.cards = [generatePlaceholderCard(nextActiveColumn)]
+        }
+
         // update cardOrderIds when remove card
         nextActiveColumn.cardOrderIds = nextActiveColumn.cards.map((card: any) => card._id)
       }
@@ -160,6 +165,9 @@ export function BoardContent({ board }: BoardContentProps) {
           ...activeDraggingCardData,
           columnId: nextOverColumn._id
         })
+
+        // remove placeholder card if it exist
+        nextOverColumn.cards = nextOverColumn.cards.filter((card: any) => !card.FE_PlaceholderCard)
 
         // update cardOrderIds by new data cardList
         nextOverColumn.cardOrderIds = nextOverColumn.cards.map((card: any) => card._id)
