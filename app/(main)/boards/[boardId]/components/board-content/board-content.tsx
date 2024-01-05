@@ -7,9 +7,7 @@ import {
   DragOverlay,
   DragStartEvent,
   DropAnimation,
-  MouseSensor,
   Over,
-  TouchSensor,
   UniqueIdentifier,
   closestCorners,
   defaultDropAnimationSideEffects,
@@ -23,8 +21,9 @@ import { arrayMove } from '@dnd-kit/sortable'
 import cloneDeep from 'lodash.clonedeep'
 
 import { ColumnList } from '../column-list'
-import { generatePlaceholderCard, mapOrder } from '@/utils'
 import { Column, Card } from '../../components'
+import { generatePlaceholderCard, mapOrder } from '@/utils'
+import { MouseSensor, TouchSensor } from '@/custom-libs'
 
 const ACTIVE_DRAG_ITEM_TYPE = {
   COLUMN: 'ACTIVE_DRAG_ITEM_TYPE_COLUMN',
