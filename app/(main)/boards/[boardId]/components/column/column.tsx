@@ -1,3 +1,4 @@
+import { toast } from 'react-toastify'
 import { MouseEvent, useState } from 'react'
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
@@ -51,7 +52,7 @@ export function Column({ column }: ColumnProps) {
   const toggleOpenNewCardForm = () => setOpenNewCardForm((prevState) => !prevState)
 
   const addNewCard = () => {
-    if (!newCardTitle) return
+    if (!newCardTitle) return toast.error('Please enter a card title', { position: 'bottom-right' })
 
     toggleOpenNewCardForm()
     setNewCardTitle('')

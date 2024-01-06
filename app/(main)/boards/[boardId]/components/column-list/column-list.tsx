@@ -7,6 +7,7 @@ import CloseIcon from '@mui/icons-material/Close'
 import TextField from '@mui/material/TextField'
 
 import { Column } from '../column'
+import { toast } from 'react-toastify'
 
 interface ColumnListProps {
   columnList: any[]
@@ -19,7 +20,8 @@ export function ColumnList({ columnList }: ColumnListProps) {
   const toggleOpenNewColumnForm = () => setOpenNewColumnForm((prevState) => !prevState)
 
   const addNewColumn = () => {
-    if (!newColumnTitle) return
+    if (!newColumnTitle)
+      return toast.error('Please enter a column title', { position: 'bottom-left' })
 
     toggleOpenNewColumnForm()
     setNewColumnTitle('')
