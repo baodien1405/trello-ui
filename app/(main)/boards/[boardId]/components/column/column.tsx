@@ -1,4 +1,5 @@
 import { toast } from 'react-toastify'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { MouseEvent, useState } from 'react'
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
@@ -24,6 +25,10 @@ import TextField from '@mui/material/TextField'
 
 import { CardList } from '../card-list'
 import { mapOrder } from '@/utils'
+import { CardPayload } from '@/models'
+import { cardApi } from '@/api'
+import { QueryKeys } from '@/constants'
+import { CircularProgress } from '@mui/material'
 
 interface ColumnProps {
   column: any
@@ -46,16 +51,40 @@ export function Column({ column }: ColumnProps) {
   const [newCardTitle, setNewCardTitle] = useState('')
   const [anchorEl, setAnchorEl] = useState<null | SVGSVGElement>(null)
   const open = Boolean(anchorEl)
+  const queryClient = useQueryClient()
+  const addCardMutation = useMutation({
+    mutationFn: (payload: CardPayload) => cardApi.add(payload)
+  })
 
   const orderedCardList = mapOrder(column?.cards, column?.cardOrderIds, '_id')
 
   const toggleOpenNewCardForm = () => setOpenNewCardForm((prevState) => !prevState)
 
   const addNewCard = () => {
-    if (!newCardTitle) return toast.error('Please enter a card title', { position: 'bottom-right' })
+    if (!newCardTitle) {
+      return toast.error('Please enter a card title', { position: 'bottom-right' })
+    }
 
-    toggleOpenNewCardForm()
-    setNewCardTitle('')
+    const payload: CardPayload = {
+      title: newCardTitle,
+      boardId: column.boardId,
+      columnId: column._id
+    }
+
+    addCardMutation.mutate(payload, {
+      onSuccess: async (data) => {
+        toast.success(data.message)
+        toggleOpenNewCardForm()
+        setNewCardTitle('')
+        queryClient.invalidateQueries({
+          queryKey: [QueryKeys.BOARD_DETAILS, column.boardId],
+          exact: true
+        })
+      },
+      onError: (error) => {
+        toast.error(error?.message)
+      }
+    })
   }
 
   const handleClick = (event: MouseEvent<SVGSVGElement>) => {
@@ -222,6 +251,12 @@ export function Column({ column }: ColumnProps) {
                     '&:hover': { bgcolor: (theme) => theme.palette.success.main }
                   }}
                   onClick={addNewCard}
+                  startIcon={
+                    addCardMutation.isPending ? (
+                      <CircularProgress color="inherit" size="1em" />
+                    ) : null
+                  }
+                  disabled={addCardMutation.isPending}
                 >
                   Add
                 </Button>
