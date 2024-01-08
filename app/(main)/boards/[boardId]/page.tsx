@@ -17,8 +17,8 @@ export default function BoardDetailPage({ params }: BoardDetailPageProps) {
   return (
     <Container disableGutters maxWidth={false} sx={{ height: '100vh' }}>
       <AppBar />
-      <BoardBar board={mockData?.board} />
-      <BoardContent board={mockData?.board} />
+      <BoardBar board={data?.metadata} />
+      <BoardContent board={data?.metadata} />
     </Container>
   )
 }
