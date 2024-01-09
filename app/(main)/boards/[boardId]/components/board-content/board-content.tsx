@@ -22,9 +22,9 @@ import cloneDeep from 'lodash.clonedeep'
 
 import { ColumnList } from '../column-list'
 import { Column, Card } from '../../components'
-import { generatePlaceholderCard, mapOrder } from '@/utils'
+import { generatePlaceholderCard } from '@/utils'
 import { MouseSensor, TouchSensor } from '@/custom-libs'
-import { boardApi } from '@/api'
+import { boardApi, columnApi } from '@/api'
 
 const ACTIVE_DRAG_ITEM_TYPE = {
   COLUMN: 'ACTIVE_DRAG_ITEM_TYPE_COLUMN',
@@ -47,11 +47,9 @@ export function BoardContent({ board }: BoardContentProps) {
       tolerance: 500
     }
   })
-
   const sensors = useSensors(mouseSensor, touchSensor)
 
   const [orderedColumnList, setOrderedColumnList] = useState<Array<any>>([])
-
   const [activeDragItemId, setActiveDragItemId] = useState<string | null>(null)
   const [activeDragItemType, setActiveDragItemType] = useState<string | null>(null)
   const [activeDragItemData, setActiveDragItemData] = useState<any>(null)
@@ -104,7 +102,7 @@ export function BoardContent({ board }: BoardContentProps) {
   )
 
   useEffect(() => {
-    setOrderedColumnList(mapOrder(board?.columns, board?.columnOrderIds, '_id'))
+    setOrderedColumnList(board.columns)
   }, [board])
 
   const findColumnByCardId = (cardId: string | number) => {
@@ -261,16 +259,19 @@ export function BoardContent({ board }: BoardContentProps) {
           oldCardIndex,
           newCardIndex
         )
+        const cardOrderIdList = dndOrderedCardList.map((card: any) => card._id)
 
         setOrderedColumnList((prevColumnList) => {
           const nextColumnList = cloneDeep(prevColumnList)
           const targetColumn = nextColumnList.find((column) => column._id === overColumn._id)
 
           targetColumn.cards = dndOrderedCardList
-          targetColumn.cardOrderIds = dndOrderedCardList.map((card: any) => card._id)
+          targetColumn.cardOrderIds = cardOrderIdList
 
           return nextColumnList
         })
+
+        columnApi.update(oldColumnWhenDraggingCard._id, { cardOrderIds: cardOrderIdList })
       }
     }
 
@@ -282,9 +283,9 @@ export function BoardContent({ board }: BoardContentProps) {
         const dndOrderedColumnList = arrayMove(orderedColumnList, oldColumnIndex, newColumnIndex)
         const dndOrderedColumnListIds = dndOrderedColumnList.map((column) => column._id)
 
-        boardApi.update(board._id, { columnOrderIds: dndOrderedColumnListIds })
-
         setOrderedColumnList(dndOrderedColumnList)
+
+        boardApi.update(board._id, { columnOrderIds: dndOrderedColumnListIds })
       }
     }
 

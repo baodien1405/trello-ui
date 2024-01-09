@@ -24,7 +24,6 @@ import CloseIcon from '@mui/icons-material/Close'
 import TextField from '@mui/material/TextField'
 
 import { CardList } from '../card-list'
-import { mapOrder } from '@/utils'
 import { CardPayload } from '@/models'
 import { cardApi } from '@/api'
 import { QueryKeys } from '@/constants'
@@ -56,7 +55,7 @@ export function Column({ column }: ColumnProps) {
     mutationFn: (payload: CardPayload) => cardApi.add(payload)
   })
 
-  const orderedCardList = mapOrder(column?.cards, column?.cardOrderIds, '_id')
+  const orderedCardList = column.cards
 
   const toggleOpenNewCardForm = () => setOpenNewCardForm((prevState) => !prevState)
 
@@ -72,7 +71,7 @@ export function Column({ column }: ColumnProps) {
     }
 
     addCardMutation.mutate(payload, {
-      onSuccess: async (data) => {
+      onSuccess: (data) => {
         toast.success(data.message)
         toggleOpenNewCardForm()
         setNewCardTitle('')
@@ -105,7 +104,7 @@ export function Column({ column }: ColumnProps) {
           ml: 2,
           borderRadius: '6px',
           height: 'fit-content',
-          maxHeight: (theme) => `calc(${theme.trello.boardContentHeight} - ${theme.spacing(5)} )`
+          maxHeight: (theme) => `calc(${theme.trello.boardContentHeight} - ${theme.spacing(5)})`
         }}
       >
         {/* Column Header */}

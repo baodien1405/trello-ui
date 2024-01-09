@@ -41,7 +41,7 @@ export function ColumnList({ columnList, boardId }: ColumnListProps) {
     }
 
     addColumnMutation.mutate(payload, {
-      onSuccess: async (data) => {
+      onSuccess: (data) => {
         toast.success(data.message)
         toggleOpenNewColumnForm()
         setNewColumnTitle('')
