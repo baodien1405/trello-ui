@@ -24,6 +24,7 @@ import { ColumnList } from '../column-list'
 import { Column, Card } from '../../components'
 import { generatePlaceholderCard, mapOrder } from '@/utils'
 import { MouseSensor, TouchSensor } from '@/custom-libs'
+import { boardApi } from '@/api'
 
 const ACTIVE_DRAG_ITEM_TYPE = {
   COLUMN: 'ACTIVE_DRAG_ITEM_TYPE_COLUMN',
@@ -279,8 +280,10 @@ export function BoardContent({ board }: BoardContentProps) {
         const newColumnIndex = orderedColumnList.findIndex((column) => column._id === over.id)
 
         const dndOrderedColumnList = arrayMove(orderedColumnList, oldColumnIndex, newColumnIndex)
-        // call API to update columnOrderIds with dndOrderedColumnListIds
-        // const dndOrderedColumnListIds = dndOrderedColumnList.map((column) => column._id)
+        const dndOrderedColumnListIds = dndOrderedColumnList.map((column) => column._id)
+
+        boardApi.update(board._id, { columnOrderIds: dndOrderedColumnListIds })
+
         setOrderedColumnList(dndOrderedColumnList)
       }
     }
