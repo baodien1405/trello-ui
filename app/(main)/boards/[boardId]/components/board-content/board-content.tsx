@@ -118,7 +118,8 @@ export function BoardContent({ board }: BoardContentProps) {
     over: Over,
     activeColumn: any,
     activeDraggingCardId: UniqueIdentifier,
-    activeDraggingCardData: any
+    activeDraggingCardData: any,
+    triggerFrom: 'handleDragOver' | 'handleDragEnd'
   ) => {
     setOrderedColumnList((prevColumnList) => {
       const overCardIndex = overColumn?.cards?.findIndex((card: any) => card._id === overCardId)
@@ -171,6 +172,21 @@ export function BoardContent({ board }: BoardContentProps) {
         nextOverColumn.cardOrderIds = nextOverColumn.cards.map((card: any) => card._id)
       }
 
+      if (triggerFrom === 'handleDragEnd') {
+        const prevColumnId = oldColumnWhenDraggingCard?._id
+        const nextColumnId = nextOverColumn?._id
+
+        boardApi.moveCardToDifferentColumn({
+          currentCardId: activeDraggingCardId,
+          prevColumnId,
+          prevCardOrderIds: nextColumnList.find((column) => column._id === prevColumnId)
+            ?.cardOrderIds,
+          nextColumnId,
+          nextCardOrderIds: nextColumnList.find((column) => column._id === nextColumnId)
+            ?.cardOrderIds
+        })
+      }
+
       return nextColumnList
     })
   }
@@ -215,7 +231,8 @@ export function BoardContent({ board }: BoardContentProps) {
         over,
         activeColumn,
         activeDraggingCardId,
-        activeDraggingCardData
+        activeDraggingCardData,
+        'handleDragOver'
       )
     }
   }
@@ -246,7 +263,8 @@ export function BoardContent({ board }: BoardContentProps) {
           over,
           activeColumn,
           activeDraggingCardId,
-          activeDraggingCardData
+          activeDraggingCardData,
+          'handleDragEnd'
         )
       } else {
         // dragging card in the same column
