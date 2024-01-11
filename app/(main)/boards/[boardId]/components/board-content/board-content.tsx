@@ -175,12 +175,18 @@ export function BoardContent({ board }: BoardContentProps) {
       if (triggerFrom === 'handleDragEnd') {
         const prevColumnId = oldColumnWhenDraggingCard?._id
         const nextColumnId = nextOverColumn?._id
+        let prevCardOrderIds = nextColumnList.find(
+          (column) => column._id === prevColumnId
+        )?.cardOrderIds
+
+        if (prevCardOrderIds[0].includes('placeholder-card')) {
+          prevCardOrderIds = []
+        }
 
         boardApi.moveCardToDifferentColumn({
           currentCardId: activeDraggingCardId,
           prevColumnId,
-          prevCardOrderIds: nextColumnList.find((column) => column._id === prevColumnId)
-            ?.cardOrderIds,
+          prevCardOrderIds,
           nextColumnId,
           nextCardOrderIds: nextColumnList.find((column) => column._id === nextColumnId)
             ?.cardOrderIds
