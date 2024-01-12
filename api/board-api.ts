@@ -1,6 +1,5 @@
-import { MoveCardDiffColumnPayload } from './../models/board'
 import axiosClient from './axios-client'
-import { Board, SuccessResponse } from '@/models'
+import { Board, SuccessResponse, MoveCardDiffColumnPayload } from '@/models'
 
 export const boardApi = {
   get(id: string): Promise<SuccessResponse<Board>> {

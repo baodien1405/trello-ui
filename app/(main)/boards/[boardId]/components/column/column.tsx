@@ -1,4 +1,5 @@
 import { toast } from 'react-toastify'
+import { useConfirm } from 'material-ui-confirm'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { MouseEvent, useState } from 'react'
 import { useSortable } from '@dnd-kit/sortable'
@@ -25,7 +26,7 @@ import TextField from '@mui/material/TextField'
 
 import { CardList } from '../card-list'
 import { CardPayload } from '@/models'
-import { cardApi } from '@/api'
+import { cardApi, columnApi } from '@/api'
 import { QueryKeys } from '@/constants'
 import { CircularProgress } from '@mui/material'
 
@@ -34,6 +35,7 @@ interface ColumnProps {
 }
 
 export function Column({ column }: ColumnProps) {
+  const confirm = useConfirm()
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
     id: column._id,
     data: { ...column }
@@ -51,8 +53,13 @@ export function Column({ column }: ColumnProps) {
   const [anchorEl, setAnchorEl] = useState<null | SVGSVGElement>(null)
   const open = Boolean(anchorEl)
   const queryClient = useQueryClient()
+
   const addCardMutation = useMutation({
     mutationFn: (payload: CardPayload) => cardApi.add(payload)
+  })
+
+  const deleteColumnMutation = useMutation({
+    mutationFn: (columnId: string) => columnApi.delete(columnId)
   })
 
   const orderedCardList = column.cards
@@ -84,6 +91,30 @@ export function Column({ column }: ColumnProps) {
         toast.error(error?.message)
       }
     })
+  }
+
+  const handleDeleteColumn = () => {
+    confirm({
+      title: 'Delete Column?',
+      description: 'This action will permanently delete your column and its cards! Are you sure?',
+      confirmationText: 'Confirm',
+      cancellationText: 'Cancel'
+    })
+      .then(() => {
+        deleteColumnMutation.mutate(column._id, {
+          onSuccess: (data) => {
+            toast.success(data.metadata.deleteResult)
+            queryClient.invalidateQueries({
+              queryKey: [QueryKeys.BOARD_DETAILS, column.boardId],
+              exact: true
+            })
+          },
+          onError: (error) => {
+            toast.error(error?.message)
+          }
+        })
+      })
+      .catch(() => {})
   }
 
   const handleClick = (event: MouseEvent<SVGSVGElement>) => {
@@ -136,13 +167,24 @@ export function Column({ column }: ColumnProps) {
               anchorEl={anchorEl}
               open={open}
               onClose={handleClose}
+              onClick={handleClose}
               MenuListProps={{
                 'aria-labelledby': 'basic-column-dropdown'
               }}
             >
-              <MenuItem>
+              <MenuItem
+                sx={{
+                  '&:hover': {
+                    color: 'success.light',
+                    '& .add-card-icon': {
+                      color: 'success.light'
+                    }
+                  }
+                }}
+                onClick={toggleOpenNewCardForm}
+              >
                 <ListItemIcon>
-                  <AddCardIcon fontSize="small" />
+                  <AddCardIcon className="add-card-icon" fontSize="small" />
                 </ListItemIcon>
                 <ListItemText>Add new card</ListItemText>
               </MenuItem>
@@ -165,11 +207,21 @@ export function Column({ column }: ColumnProps) {
                 <ListItemText>Paste</ListItemText>
               </MenuItem>
               <Divider />
-              <MenuItem>
+              <MenuItem
+                sx={{
+                  '&:hover': {
+                    color: 'warning.dark',
+                    '& .delete-forever-icon': {
+                      color: 'warning.dark'
+                    }
+                  }
+                }}
+                onClick={handleDeleteColumn}
+              >
                 <ListItemIcon>
-                  <DeleteForeverIcon fontSize="small" />
+                  <DeleteForeverIcon className="delete-forever-icon" fontSize="small" />
                 </ListItemIcon>
-                <ListItemText>Remove this column</ListItemText>
+                <ListItemText>Delete this column</ListItemText>
               </MenuItem>
               <MenuItem>
                 <ListItemIcon>

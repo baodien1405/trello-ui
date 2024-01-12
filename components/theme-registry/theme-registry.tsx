@@ -5,14 +5,24 @@ import { Experimental_CssVarsProvider as CssVarsProvider } from '@mui/material/s
 import CssBaseline from '@mui/material/CssBaseline'
 import NextAppDirEmotionCacheProvider from './emotion-cache'
 import { theme } from '@/utils'
+import { ConfirmProvider } from 'material-ui-confirm'
 
 export default function ThemeRegistry({ children }: { children: ReactNode }) {
   return (
     <NextAppDirEmotionCacheProvider options={{ key: 'mui' }}>
-      <CssVarsProvider theme={theme}>
-        <CssBaseline />
-        {children}
-      </CssVarsProvider>
+      <ConfirmProvider
+        defaultOptions={{
+          allowClose: false,
+          dialogProps: { maxWidth: 'xs' },
+          confirmationButtonProps: { color: 'secondary', variant: 'outlined' },
+          cancellationButtonProps: { color: 'inherit' }
+        }}
+      >
+        <CssVarsProvider theme={theme}>
+          <CssBaseline />
+          {children}
+        </CssVarsProvider>
+      </ConfirmProvider>
     </NextAppDirEmotionCacheProvider>
   )
 }
