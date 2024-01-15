@@ -1,1 +1,2 @@
-// export all components boards
+export * from './board-list'
+export * from './board-card'

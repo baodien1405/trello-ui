@@ -1,7 +1,16 @@
 import axiosClient from './axios-client'
-import { Board, SuccessResponse, MoveCardDiffColumnPayload } from '@/models'
+import {
+  Board,
+  SuccessResponse,
+  MoveCardDiffColumnPayload,
+  ListParams,
+  ListResponse
+} from '@/models'
 
 export const boardApi = {
+  getAll(params: Partial<ListParams>): Promise<SuccessResponse<ListResponse<Board>>> {
+    return axiosClient.get(`/v1/api/boards`, { params })
+  },
   get(id: string): Promise<SuccessResponse<Board>> {
     return axiosClient.get(`/v1/api/boards/${id}`)
   },
