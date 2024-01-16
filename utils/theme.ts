@@ -50,6 +50,11 @@ export const theme = extendTheme({
     fontFamily: roboto.style.fontFamily
   },
   components: {
+    MuiLink: {
+      defaultProps: {
+        underline: 'none'
+      }
+    },
     MuiCssBaseline: {
       styleOverrides: {
         body: {

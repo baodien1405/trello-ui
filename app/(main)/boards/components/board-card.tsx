@@ -1,8 +1,10 @@
+import Link from 'next/link'
 import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
 import Typography from '@mui/material/Typography'
 
 import { Board } from '@/models'
+import { path } from '@/constants'
 
 export interface BoardCardProps {
   board: Partial<Board>
@@ -10,15 +12,24 @@ export interface BoardCardProps {
 
 export function BoardCard({ board }: BoardCardProps) {
   return (
-    <Card>
-      <CardContent>
-        <Typography gutterBottom variant="h5" component="div">
-          {board.title}
-        </Typography>
-        <Typography variant="body2" color="text.secondary">
-          {board.description}
-        </Typography>
-      </CardContent>
-    </Card>
+    <Link href={`${path.boards}/${board._id}`} style={{ textDecoration: 'none' }}>
+      <Card
+        sx={{
+          transition: 'all 0.2s',
+          '&:hover': {
+            bgcolor: (theme) => theme.palette.primary.main
+          }
+        }}
+      >
+        <CardContent>
+          <Typography gutterBottom variant="h5" component="div">
+            {board.title}
+          </Typography>
+          <Typography variant="body2" color="text.secondary">
+            {board.description}
+          </Typography>
+        </CardContent>
+      </Card>
+    </Link>
   )
 }

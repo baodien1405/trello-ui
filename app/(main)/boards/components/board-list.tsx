@@ -13,12 +13,12 @@ export function BoardList({ boardList, loading }: BoardListProps) {
   }
 
   return (
-    <>
+    <Grid container columns={12} spacing={2} disableEqualOverflow>
       {boardList.map((board) => (
-        <Grid xs={8} key={board._id}>
+        <Grid xs={4} key={board._id}>
           <BoardCard board={board} />
         </Grid>
       ))}
-    </>
+    </Grid>
   )
 }

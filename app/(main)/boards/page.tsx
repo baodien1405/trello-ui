@@ -17,16 +17,14 @@ export default function BoardsPage() {
     <Container disableGutters maxWidth={false} sx={{ height: '100vh' }}>
       <AppBar />
 
-      <Grid container columns={24}>
-        <Grid xs={8}>
+      <Grid container columns={12}>
+        <Grid xs={4}>
           <Box>Sidebar</Box>
         </Grid>
 
-        <Grid xs={16}>
-          <Typography>Your board</Typography>
-          <Grid container gap={2}>
-            <BoardList boardList={data?.metadata.results || []} loading={isLoading} />
-          </Grid>
+        <Grid xs={8} padding={2}>
+          <Typography marginBottom={2}>Your board</Typography>
+          <BoardList boardList={data?.metadata.results || []} loading={isLoading} />
         </Grid>
       </Grid>
     </Container>
