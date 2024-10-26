@@ -1,6 +1,6 @@
 import { Board } from '@/models'
 import { BoardCard } from './board-card'
-import Grid from '@mui/material/Unstable_Grid2'
+import Grid from '@mui/material/Grid2'
 
 export interface BoardListProps {
   boardList: Board[]
@@ -13,9 +13,9 @@ export function BoardList({ boardList, loading }: BoardListProps) {
   }
 
   return (
-    <Grid container columns={12} spacing={2} disableEqualOverflow>
+    <Grid container columns={12} spacing={2}>
       {boardList.map((board) => (
-        <Grid xs={4} key={board._id}>
+        <Grid size={{ xs: 4 }} key={board._id}>
           <BoardCard board={board} />
         </Grid>
       ))}

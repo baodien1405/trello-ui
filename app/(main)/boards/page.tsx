@@ -2,7 +2,7 @@
 
 import React from 'react'
 import Container from '@mui/material/Container'
-import Grid from '@mui/material/Unstable_Grid2'
+import Grid from '@mui/material/Grid2'
 import Typography from '@mui/material/Typography'
 import Box from '@mui/material/Box'
 
@@ -18,11 +18,11 @@ export default function BoardsPage() {
       <AppBar />
 
       <Grid container columns={12}>
-        <Grid xs={4}>
+        <Grid size={{ xs: 4 }}>
           <Box>Sidebar</Box>
         </Grid>
 
-        <Grid xs={8} padding={2}>
+        <Grid size={{ xs: 4 }} padding={2}>
           <Typography marginBottom={2}>Your board</Typography>
           <BoardList boardList={data?.metadata.results || []} loading={isLoading} />
         </Grid>

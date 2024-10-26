@@ -1,3 +1,5 @@
+'use client'
+
 import { MouseSensor as DndKitMouseSensor, TouchSensor as DndKitTouchSensor } from '@dnd-kit/core'
 import { MouseEvent, TouchEvent } from 'react'
 

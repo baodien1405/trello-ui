@@ -20,11 +20,11 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { arrayMove } from '@dnd-kit/sortable'
 import cloneDeep from 'lodash.clonedeep'
 
-import { ColumnList } from '../column-list'
-import { Column, Card } from '../../components'
-import { generatePlaceholderCard } from '@/utils'
-import { MouseSensor, TouchSensor } from '@/custom-libs'
+import { generatePlaceholderCard, MouseSensor, TouchSensor } from '@/utils'
 import { boardApi, columnApi } from '@/api'
+import { ColumnList } from '@/app/(main)/boards/[boardId]/components/column-list'
+import { Column } from '@/app/(main)/boards/[boardId]/components/column'
+import { Card } from '@/app/(main)/boards/[boardId]/components/card'
 
 const ACTIVE_DRAG_ITEM_TYPE = {
   COLUMN: 'ACTIVE_DRAG_ITEM_TYPE_COLUMN',
