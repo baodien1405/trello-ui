@@ -86,17 +86,22 @@ export default function AppBar() {
               '&.Mui-focused fieldset': { borderColor: 'white' }
             }
           }}
-          InputProps={{
-            startAdornment: (
-              <InputAdornment position="start">
-                <SearchIcon sx={{ color: 'white' }} />
-              </InputAdornment>
-            ),
-            endAdornment: (
-              <InputAdornment position="end" onClick={() => setSearchValue('')}>
-                <CloseIcon fontSize="small" sx={{ color: searchValue ? 'white' : 'transparent' }} />
-              </InputAdornment>
-            )
+          slotProps={{
+            input: {
+              startAdornment: (
+                <InputAdornment position="start">
+                  <SearchIcon sx={{ color: 'white' }} />
+                </InputAdornment>
+              ),
+              endAdornment: (
+                <InputAdornment position="end" onClick={() => setSearchValue('')}>
+                  <CloseIcon
+                    fontSize="small"
+                    sx={{ color: searchValue ? 'white' : 'transparent' }}
+                  />
+                </InputAdornment>
+              )
+            }
           }}
         />
 
