@@ -1,4 +1,5 @@
 import axios, { AxiosError } from 'axios'
+import { toast } from 'react-toastify'
 
 const axiosClient = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_ENDPOINT,
@@ -17,6 +18,15 @@ axiosClient.interceptors.response.use(
   function (error: AxiosError) {
     // Any status codes that falls outside the range of 2xx cause this function to trigger
     // Do something with response error
+    let errorMessage = error?.message
+
+    if ((error?.response?.data as any)?.message) {
+      errorMessage = (error?.response?.data as any)?.message
+    }
+
+    if (error?.response?.status !== 401) {
+      toast.error(errorMessage)
+    }
     return Promise.reject(error.response?.data)
   }
 )
