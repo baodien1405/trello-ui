@@ -4,7 +4,7 @@ import CardContent from '@mui/material/CardContent'
 import Typography from '@mui/material/Typography'
 
 import { Board } from '@/models'
-import { path } from '@/constants'
+import { ROUTE_PATH } from '@/constants'
 
 export interface BoardCardProps {
   board: Partial<Board>
@@ -12,7 +12,7 @@ export interface BoardCardProps {
 
 export function BoardCard({ board }: BoardCardProps) {
   return (
-    <Link href={`${path.boards}/${board._id}`} style={{ textDecoration: 'none' }}>
+    <Link href={`${ROUTE_PATH.boards}/${board._id}`} style={{ textDecoration: 'none' }}>
       <Card
         sx={{
           transition: 'all 0.2s',

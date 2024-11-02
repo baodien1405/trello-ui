@@ -1,6 +1,6 @@
 import Link from 'next/link'
-import { path } from '@/constants'
+import { ROUTE_PATH } from '@/constants'
 
 export default function Home() {
-  return <Link href={path.boards}>Board List Page</Link>
+  return <Link href={ROUTE_PATH.boards}>Board List Page</Link>
 }
