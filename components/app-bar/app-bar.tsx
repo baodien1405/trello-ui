@@ -17,7 +17,7 @@ import SearchIcon from '@mui/icons-material/Search'
 import CloseIcon from '@mui/icons-material/Close'
 
 import ModeSelect from '@/components/mode-select'
-import { TrelloIcon } from '@/icons'
+import { TrelloIcon } from '@/assets'
 import { Profiles, Recent, Starred, Templates, Workspaces } from './menu-list'
 
 export default function AppBar() {

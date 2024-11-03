@@ -1,2 +1,3 @@
-export { default as svgs } from './svgs'
-export { default as images } from './images'
+export * from './svgs'
+export * from './images'
+export * from './icons'
