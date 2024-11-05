@@ -1,3 +1,3 @@
-export const ROUTE_PATH = {
-  boards: '/boards'
+export const RoutePath = {
+  BOARDS: '/boards'
 } as const
