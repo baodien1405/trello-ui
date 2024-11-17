@@ -12,10 +12,6 @@ export const authApi = {
   },
 
   verify(payload: VerifyPayload): Promise<SuccessResponse<any>> {
-    // toast.success(
-    //   'Account verified successfully! Now you can login to enjoy our services! Have a good day!',
-    //   { theme: 'colored' }
-    // )
     return axiosClient.put(ApiEndpoint.VERIFY_USER, payload)
   }
 }
