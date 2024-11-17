@@ -1,6 +1,7 @@
 export const ApiEndpoint = {
   AUTH_REGISTER: '/v1/api/users/register',
   AUTH_LOGIN: '/v1/api/users/login',
+  VERIFY_USER: '/v1/api/users/verify',
   BOARD_GET_LIST: '/v1/api/boards',
   BOARD_GET_DETAIL: '/v1/api/boards/{boardId}',
   BOARD_UPDATE: '/v1/api/boards/{boardId}',

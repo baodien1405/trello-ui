@@ -1,2 +1,2 @@
-export * from './fetchers'
-export * from './mutators'
+export * from './queries'
+export * from './mutations'

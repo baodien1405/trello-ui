@@ -6,12 +6,20 @@ import Button from '@mui/material/Button'
 import CardActions from '@mui/material/CardActions'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
+import { toast } from 'react-toastify'
+import { useRouter } from 'next/navigation'
+import { CircularProgress } from '@mui/material'
 
 import { useAuthSchema } from '@/app/(auth)/_hooks'
 import FieldErrorAlert from '@/components/field-error-alert'
+import { RegisterPayload } from '@/models'
+import { useRegisterMutation } from '@/hooks'
+import { RoutePath } from '@/constants'
 
 export function RegisterForm() {
+  const router = useRouter()
   const schema = useAuthSchema()
+  const { mutateAsync, isPending } = useRegisterMutation()
 
   const {
     register,
@@ -21,7 +29,19 @@ export function RegisterForm() {
     resolver: yupResolver(schema)
   })
 
-  const handleRegister = (payload: any) => {}
+  const handleRegister = async ({ email, password }: RegisterPayload) => {
+    const response = await mutateAsync({
+      email,
+      password
+    })
+
+    toast.success(
+      'Account created successfully! Please check and verify your account before logging in!',
+      { theme: 'colored' }
+    )
+
+    router.push(`${RoutePath.LOGIN}?registeredEmail=${response.metadata.user.email}`)
+  }
 
   return (
     <form onSubmit={handleSubmit(handleRegister)}>
@@ -65,7 +85,15 @@ export function RegisterForm() {
       </Box>
 
       <CardActions sx={{ padding: '0 1em 1em 1em' }}>
-        <Button type="submit" variant="contained" color="primary" size="large" fullWidth>
+        <Button
+          type="submit"
+          variant="contained"
+          color="primary"
+          size="large"
+          fullWidth
+          disabled={isPending}
+          startIcon={isPending ? <CircularProgress color="inherit" size="1em" /> : null}
+        >
           Register
         </Button>
       </CardActions>

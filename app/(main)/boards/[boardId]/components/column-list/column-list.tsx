@@ -1,56 +1,48 @@
-import { toast } from 'react-toastify'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { SortableContext, horizontalListSortingStrategy } from '@dnd-kit/sortable'
-import { useState } from 'react'
+import CloseIcon from '@mui/icons-material/Close'
+import NoteAddIcon from '@mui/icons-material/NoteAdd'
+import { CircularProgress } from '@mui/material'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
-import NoteAddIcon from '@mui/icons-material/NoteAdd'
-import CloseIcon from '@mui/icons-material/Close'
 import TextField from '@mui/material/TextField'
-import { CircularProgress } from '@mui/material'
+import { useState } from 'react'
+import { toast } from 'react-toastify'
 
-import { Column } from '../column'
-import { ColumnPayload } from '@/models'
-import { columnApi } from '@/api'
-import { QueryKeys } from '@/constants'
+import { useAddColumnMutation } from '@/hooks'
+import { Column as ColumnInterface, ColumnPayload } from '@/models'
+import { Column } from '@/app/(main)/boards/[boardId]/components'
 
 interface ColumnListProps {
-  columnList: any[]
+  columnList: ColumnInterface[]
   boardId: string
 }
 
 export function ColumnList({ columnList, boardId }: ColumnListProps) {
   const [openNewColumnForm, setOpenNewColumnForm] = useState(false)
   const [newColumnTitle, setNewColumnTitle] = useState('')
-
-  const queryClient = useQueryClient()
-  const addColumnMutation = useMutation({
-    mutationFn: (payload: ColumnPayload) => columnApi.add(payload)
-  })
+  const addColumnMutation = useAddColumnMutation(boardId)
 
   const toggleOpenNewColumnForm = () => setOpenNewColumnForm((prevState) => !prevState)
 
-  const addNewColumn = () => {
+  const handleAddNewColumn = async () => {
     if (!newColumnTitle) {
       return toast.error('Please enter a column title', { position: 'bottom-left' })
     }
 
-    const payload: ColumnPayload = {
-      title: newColumnTitle,
-      boardId: boardId
-    }
-
-    addColumnMutation.mutate(payload, {
-      onSuccess: (data) => {
-        toast.success(data.message)
-        toggleOpenNewColumnForm()
-        setNewColumnTitle('')
-        queryClient.invalidateQueries({ queryKey: [QueryKeys.BOARD_DETAILS, boardId], exact: true })
-      },
-      onError: (error) => {
-        toast.error(error?.message)
+    try {
+      const payload: ColumnPayload = {
+        title: newColumnTitle,
+        boardId: boardId
       }
-    })
+
+      const response = await addColumnMutation.mutateAsync(payload)
+
+      toast.success(response.message)
+      toggleOpenNewColumnForm()
+      setNewColumnTitle('')
+    } catch (error: any) {
+      toast.error(error?.message)
+    }
   }
 
   return (
@@ -147,7 +139,7 @@ export function ColumnList({ columnList, boardId }: ColumnListProps) {
                   borderColor: (theme) => theme.palette.success.main,
                   '&:hover': { bgcolor: (theme) => theme.palette.success.main }
                 }}
-                onClick={addNewColumn}
+                onClick={handleAddNewColumn}
                 startIcon={
                   addColumnMutation.isPending ? (
                     <CircularProgress color="inherit" size="1em" />

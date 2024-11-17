@@ -6,12 +6,12 @@ import Grid from '@mui/material/Grid2'
 import Typography from '@mui/material/Typography'
 import Box from '@mui/material/Box'
 
-import { useBoardList } from '@/hooks'
+import { useBoardListQuery } from '@/hooks'
 import AppBar from '@/components/app-bar'
 import { BoardList } from './components'
 
 export default function BoardsPage() {
-  const { data, isLoading } = useBoardList({ page: 1, limit: 10 })
+  const { data, isLoading } = useBoardListQuery({ page: 1, limit: 10 })
 
   return (
     <Container disableGutters maxWidth={false} sx={{ height: '100vh' }}>

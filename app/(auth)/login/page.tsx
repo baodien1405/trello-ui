@@ -1,15 +1,14 @@
-import Box from '@mui/material/Box'
-import Avatar from '@mui/material/Avatar'
-import LockIcon from '@mui/icons-material/Lock'
 import AutoAwesomeMosaicIcon from '@mui/icons-material/AutoAwesomeMosaic'
-import Typography from '@mui/material/Typography'
+import LockIcon from '@mui/icons-material/Lock'
 import { Card as MuiCard } from '@mui/material'
+import Avatar from '@mui/material/Avatar'
+import Box from '@mui/material/Box'
+import Typography from '@mui/material/Typography'
 import Zoom from '@mui/material/Zoom'
-import Alert from '@mui/material/Alert'
 import Link from 'next/link'
 
 import { Author } from '@/app/(auth)/_components'
-import { LoginForm } from '@/app/(auth)/login/_components'
+import { AlertMessage, LoginForm } from '@/app/(auth)/login/_components'
 
 export default function LoginPage() {
   return (
@@ -33,41 +32,7 @@ export default function LoginPage() {
 
         <Author />
 
-        <Box
-          sx={{
-            marginTop: '1em',
-            display: 'flex',
-            justifyContent: 'center',
-            flexDirection: 'column',
-            padding: '0 1em'
-          }}
-        >
-          <Alert severity="success" sx={{ '.MuiAlert-message': { overflow: 'hidden' } }}>
-            Your email&nbsp;
-            <Typography
-              variant="body2"
-              component="span"
-              sx={{ fontWeight: 'bold', '&:hover': { color: '#fdba26' } }}
-            >
-              baodien1405@gmail.com
-            </Typography>
-            &nbsp;has been verified.
-            <br />
-            Now you can login to enjoy our services! Have a good day!
-          </Alert>
-          <Alert severity="info" sx={{ '.MuiAlert-message': { overflow: 'hidden' } }}>
-            An email has been sent to&nbsp;
-            <Typography
-              variant="body2"
-              component="span"
-              sx={{ fontWeight: 'bold', '&:hover': { color: '#fdba26' } }}
-            >
-              baodien1405@gmail.com
-            </Typography>
-            <br />
-            Please check and verify your account before logging in!
-          </Alert>
-        </Box>
+        <AlertMessage />
 
         <LoginForm />
 

@@ -8,3 +8,8 @@ export interface RegisterPayload {
   password: string
   confirm_password: string
 }
+
+export interface VerifyPayload {
+  email: string
+  token: string
+}

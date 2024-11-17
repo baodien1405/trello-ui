@@ -3,9 +3,12 @@ import { QueryKeys } from '@/constants'
 import { Board, SuccessResponse } from '@/models'
 import { useQuery, UseQueryOptions } from '@tanstack/react-query'
 
-type UseBoardDetailsOptions = Omit<UseQueryOptions<SuccessResponse<Board>>, 'queryKey' | 'queryFn'>
+type UseBoardDetailsOptionsQuery = Omit<
+  UseQueryOptions<SuccessResponse<Board>>,
+  'queryKey' | 'queryFn'
+>
 
-export const useBoardDetails = (boardId: string, options?: UseBoardDetailsOptions) => {
+export const useBoardDetailsQuery = (boardId: string, options?: UseBoardDetailsOptionsQuery) => {
   return useQuery({
     ...options,
     queryKey: [QueryKeys.BOARD_DETAILS, boardId],
