@@ -1,11 +1,13 @@
-import axios, { AxiosError } from 'axios'
+import axios, { AxiosError, HttpStatusCode } from 'axios'
 import { toast } from 'react-toastify'
 
 const axiosClient = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_ENDPOINT,
   headers: {
     'Content-Type': 'application/json'
-  }
+  },
+  timeout: 10 * 60 * 1000,
+  withCredentials: true
 })
 
 // Add a response interceptor
@@ -24,7 +26,7 @@ axiosClient.interceptors.response.use(
       errorMessage = (error?.response?.data as any)?.message
     }
 
-    if (error?.response?.status !== 401) {
+    if (error?.response?.status !== HttpStatusCode.Gone) {
       toast.error(errorMessage)
     }
     return Promise.reject(error.response?.data)

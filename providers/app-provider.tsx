@@ -8,7 +8,8 @@ import 'react-toastify/dist/ReactToastify.css'
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      refetchOnWindowFocus: false
+      refetchOnWindowFocus: false,
+      retry: false
     }
   }
 })
