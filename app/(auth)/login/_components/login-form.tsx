@@ -12,13 +12,14 @@ import { useRouter } from 'next/navigation'
 import { useAuthSchema } from '@/app/(auth)/_hooks'
 import FieldErrorAlert from '@/components/field-error-alert'
 import { LoginPayload } from '@/models'
-import { useLoginMutation } from '@/hooks'
+import { useAppStore, useLoginMutation } from '@/hooks'
 import { RoutePath } from '@/constants'
 
 export function LoginForm() {
   const router = useRouter()
   const schema = useAuthSchema()
   const { mutateAsync, isPending } = useLoginMutation()
+  const setCurrentUser = useAppStore((state) => state.setCurrentUser)
 
   const {
     register,
@@ -29,7 +30,9 @@ export function LoginForm() {
   })
 
   const handleLogin = async (payload: LoginPayload) => {
-    await mutateAsync(payload)
+    const response = await mutateAsync(payload)
+
+    setCurrentUser(response.metadata.user)
     router.push(RoutePath.BOARDS)
   }
 

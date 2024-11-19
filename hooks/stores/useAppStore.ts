@@ -1,17 +1,14 @@
+import { User } from '@/models'
 import { create } from 'zustand'
 
 interface AppStoreInterface {
-  currentUser: any
-  setCurrentUser: (user?: any) => void
+  currentUser: User | null
+  setCurrentUser: (user: User | null) => void
 }
 
 export const useAppStore = create<AppStoreInterface>((set) => ({
   currentUser: null,
-  setCurrentUser: (user: any) => {
+  setCurrentUser: (user: User | null) => {
     set({ currentUser: user })
-    if (!user) {
-      // removeAccessTokenToLS()
-      // removeRefreshTokenToLS()
-    }
   }
 }))

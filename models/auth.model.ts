@@ -13,3 +13,19 @@ export interface VerifyPayload {
   email: string
   token: string
 }
+
+export interface User {
+  _id: string
+  email: string
+  username: string
+  displayName: string
+  verifyToken: string
+  role: string
+  avatar: string
+}
+
+export interface AuthResponse {
+  accessToken: string
+  refreshToken: string
+  user: User
+}
