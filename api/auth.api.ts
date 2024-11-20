@@ -23,5 +23,9 @@ export const authApi = {
 
   logout(): Promise<SuccessResponse<any>> {
     return axiosClient.post(ApiEndpoint.AUTH_LOGOUT)
+  },
+
+  refreshToken(): Promise<SuccessResponse<Omit<AuthResponse, 'user'>>> {
+    return axiosClient.get(ApiEndpoint.AUTH_REFRESH_TOKEN)
   }
 }
