@@ -22,7 +22,7 @@ export const authApi = {
   },
 
   logout(): Promise<SuccessResponse<any>> {
-    return axiosClient.post(ApiEndpoint.AUTH_LOGOUT)
+    return axiosClient.delete(ApiEndpoint.AUTH_LOGOUT)
   },
 
   refreshToken(): Promise<SuccessResponse<Omit<AuthResponse, 'user'>>> {
