@@ -5,6 +5,8 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { ConfirmOptions, ConfirmProvider } from 'material-ui-confirm'
 import { ToastContainer } from 'react-toastify'
 
+import RefreshToken from '@/components/refresh-token'
+
 import 'react-toastify/dist/ReactToastify.css'
 
 const queryClient = new QueryClient({
@@ -35,6 +37,8 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     <QueryClientProvider client={queryClient}>
       <ConfirmProvider defaultOptions={DEFAULT_CONFIRM_OPTIONS}>
         {children}
+
+        <RefreshToken />
         <ReactQueryDevtools initialIsOpen={false} />
         <ToastContainer />
       </ConfirmProvider>

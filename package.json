@@ -1,6 +1,6 @@
 {
   "name": "trello-ui",
-  "version": "1.6.2",
+  "version": "1.6.3",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -23,6 +23,7 @@
     "@tanstack/react-query-devtools": "5.59.16",
     "axios": "^1.6.4",
     "js-cookie": "^3.0.5",
+    "jwt-decode": "^4.0.0",
     "lodash.clonedeep": "^4.5.0",
     "material-ui-confirm": "3.0.16",
     "next": "14.2.16",
