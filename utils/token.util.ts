@@ -1,8 +1,12 @@
 import { jwtDecode } from 'jwt-decode'
-import Cookies from 'js-cookie'
 
 import { User } from '@/models'
 import { authApi } from '@/api'
+import {
+  getAccessTokenFromLS,
+  getRefreshTokenFromLS,
+  setAccessTokenToLS
+} from '@/utils/localstorage.utils'
 
 interface TokenPayload {
   user: User
@@ -15,8 +19,8 @@ export const checkAndRefreshToken = async (params?: {
   onSuccess?: () => void
   onError?: () => void
 }) => {
-  const accessToken = Cookies.get('accessToken')
-  const refreshToken = Cookies.get('refreshToken')
+  const accessToken = getAccessTokenFromLS()
+  const refreshToken = getRefreshTokenFromLS()
 
   if (!accessToken || !refreshToken) return
 
@@ -43,7 +47,9 @@ export const checkAndRefreshToken = async (params?: {
 
   if (params?.force || remainingAccessTokenTime < validAccessTokenDuration / 3) {
     try {
-      await authApi.refreshToken()
+      const response = await authApi.refreshToken()
+      setAccessTokenToLS(response.metadata.accessToken)
+      setAccessTokenToLS(response.metadata.refreshToken)
       if (params?.onSuccess) {
         params.onSuccess()
       }

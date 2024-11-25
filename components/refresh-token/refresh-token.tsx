@@ -30,7 +30,7 @@ export default function RefreshToken() {
 
     handleRefreshToken()
 
-    interval = setInterval(handleRefreshToken, 1000)
+    interval = setInterval(handleRefreshToken, 5000)
 
     return () => {
       clearInterval(interval)

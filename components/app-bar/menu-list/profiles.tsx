@@ -17,6 +17,7 @@ import { useConfirm } from 'material-ui-confirm'
 
 import { useAppStore, useLogoutMutation } from '@/hooks'
 import { RoutePath } from '@/constants'
+import { removeAccessTokenToLS, removeRefreshTokenToLS } from '@/utils'
 
 export function Profiles() {
   const confirm = useConfirm()
@@ -50,6 +51,8 @@ export function Profiles() {
       .then(() => {
         mutateAsync().then(() => {
           setCurrentUser(null)
+          removeAccessTokenToLS()
+          removeRefreshTokenToLS()
           router.push(RoutePath.LOGIN)
           toast.success('Logout successfully!')
         })

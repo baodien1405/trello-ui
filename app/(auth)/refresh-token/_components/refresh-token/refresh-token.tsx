@@ -1,18 +1,10 @@
 'use client'
 
-import Cookies from 'js-cookie'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useEffect } from 'react'
 
 import { RoutePath } from '@/constants'
-import { User } from '@/models'
-import { checkAndRefreshToken } from '@/utils'
-
-export interface TokenPayload {
-  user: User
-  exp: number
-  iat: number
-}
+import { checkAndRefreshToken, getRefreshTokenFromLS } from '@/utils'
 
 export function RefreshToken() {
   const router = useRouter()
@@ -21,7 +13,7 @@ export function RefreshToken() {
   const redirectPath = searchParams?.get('redirect')
 
   useEffect(() => {
-    if (refreshTokenFromUrl && refreshTokenFromUrl === Cookies.get('refreshToken')) {
+    if (refreshTokenFromUrl && refreshTokenFromUrl === getRefreshTokenFromLS()) {
       checkAndRefreshToken({
         onSuccess: () => {
           router.push(redirectPath || RoutePath.HOME)
