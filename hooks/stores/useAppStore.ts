@@ -1,4 +1,5 @@
 import { User } from '@/models'
+import { getUserFromLS } from '@/utils'
 import { create } from 'zustand'
 
 interface AppStoreInterface {
@@ -7,7 +8,7 @@ interface AppStoreInterface {
 }
 
 export const useAppStore = create<AppStoreInterface>((set) => ({
-  currentUser: null,
+  currentUser: getUserFromLS(),
   setCurrentUser: (user: User | null) => {
     set({ currentUser: user })
   }

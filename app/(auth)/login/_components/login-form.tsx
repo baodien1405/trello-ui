@@ -14,7 +14,7 @@ import FieldErrorAlert from '@/components/field-error-alert'
 import { LoginPayload } from '@/models'
 import { useAppStore, useLoginMutation } from '@/hooks'
 import { RoutePath } from '@/constants'
-import { setAccessTokenToLS, setRefreshTokenToLS } from '@/utils'
+import { setAccessTokenToLS, setRefreshTokenToLS, setUserToLS } from '@/utils'
 
 export function LoginForm() {
   const router = useRouter()
@@ -34,6 +34,7 @@ export function LoginForm() {
     const response = await mutateAsync(payload)
 
     setCurrentUser(response.metadata.user)
+    setUserToLS(response.metadata.user)
     setAccessTokenToLS(response.metadata.accessToken)
     setRefreshTokenToLS(response.metadata.refreshToken)
     router.push(RoutePath.BOARDS)
@@ -50,6 +51,7 @@ export function LoginForm() {
             type="text"
             variant="outlined"
             {...register('email')}
+            error={!!errors.email}
           />
 
           <FieldErrorAlert errors={errors} fieldName="email" />
@@ -62,6 +64,7 @@ export function LoginForm() {
             type="password"
             variant="outlined"
             {...register('password')}
+            error={!!errors.password}
           />
 
           <FieldErrorAlert errors={errors} fieldName="password" />

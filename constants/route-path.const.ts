@@ -3,5 +3,7 @@ export const RoutePath = {
   LOGIN: '/login',
   REGISTER: '/register',
   REFRESH_TOKEN: '/refresh-token',
-  BOARDS: '/boards'
+  BOARDS: '/boards',
+  ACCOUNT: '/settings/account',
+  SECURITY: '/settings/security'
 } as const

@@ -17,7 +17,8 @@ import { useConfirm } from 'material-ui-confirm'
 
 import { useAppStore, useLogoutMutation } from '@/hooks'
 import { RoutePath } from '@/constants'
-import { removeAccessTokenToLS, removeRefreshTokenToLS } from '@/utils'
+import { removeAccessTokenToLS, removeRefreshTokenToLS, removeUserToLS } from '@/utils'
+import Link from 'next/link'
 
 export function Profiles() {
   const confirm = useConfirm()
@@ -51,6 +52,7 @@ export function Profiles() {
       .then(() => {
         mutateAsync().then(() => {
           setCurrentUser(null)
+          removeUserToLS()
           removeAccessTokenToLS()
           removeRefreshTokenToLS()
           router.push(RoutePath.LOGIN)
@@ -89,20 +91,22 @@ export function Profiles() {
           'aria-labelledby': 'basic-button-profiles'
         }}
       >
-        <MenuItem
-          sx={{
-            '&:hover': {
-              color: 'success.light'
-            }
-          }}
-        >
-          <Avatar
-            src={currentUser?.avatar}
-            alt={currentUser?.displayName}
-            sx={{ width: 28, height: 28, mr: 2 }}
-          />
-          Profile
-        </MenuItem>
+        <Link href={RoutePath.ACCOUNT}>
+          <MenuItem
+            sx={{
+              '&:hover': {
+                color: 'success.light'
+              }
+            }}
+          >
+            <Avatar
+              src={currentUser?.avatar}
+              alt={currentUser?.displayName}
+              sx={{ width: 28, height: 28, mr: 2 }}
+            />
+            Profile
+          </MenuItem>
+        </Link>
 
         <Divider />
         <MenuItem>

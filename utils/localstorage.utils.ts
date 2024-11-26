@@ -1,4 +1,5 @@
 import { StorageKey } from '@/constants'
+import { User } from '@/models'
 
 export const getAccessTokenFromLS = () => {
   return localStorage.getItem(StorageKey.ACCESS_TOKEN)
@@ -22,4 +23,20 @@ export const setRefreshTokenToLS = (refreshToken: string) => {
 
 export const removeRefreshTokenToLS = () => {
   localStorage.removeItem(StorageKey.REFRESH_TOKEN)
+}
+
+export const getUserFromLS = () => {
+  try {
+    return JSON.parse(localStorage.getItem(StorageKey.USER) || '')
+  } catch (error) {
+    return null
+  }
+}
+
+export const setUserToLS = (user: User) => {
+  localStorage.setItem(StorageKey.USER, JSON.stringify(user))
+}
+
+export const removeUserToLS = () => {
+  localStorage.removeItem(StorageKey.USER)
 }

@@ -54,6 +54,7 @@ export function RegisterForm() {
             type="text"
             variant="outlined"
             {...register('email')}
+            error={!!errors.email}
           />
 
           <FieldErrorAlert errors={errors} fieldName="email" />
@@ -66,6 +67,7 @@ export function RegisterForm() {
             type="password"
             variant="outlined"
             {...register('password')}
+            error={!!errors.password}
           />
 
           <FieldErrorAlert errors={errors} fieldName="password" />
@@ -78,6 +80,7 @@ export function RegisterForm() {
             type="password"
             variant="outlined"
             {...register('confirm_password')}
+            error={!!errors['confirm_password']}
           />
         </Box>
 
