@@ -3,6 +3,7 @@ import { AppRouterCacheProvider } from '@mui/material-nextjs/v14-appRouter'
 import { ThemeProvider } from '@mui/material/styles'
 import CssBaseline from '@mui/material/CssBaseline'
 import NextTopLoader from 'nextjs-toploader'
+import GlobalStyles from '@mui/material/GlobalStyles'
 
 import { AppProvider } from '@/providers'
 import { theme } from '@/utils'
@@ -22,6 +23,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <AppProvider>
           <AppRouterCacheProvider options={{ enableCssLayer: true }}>
             <ThemeProvider theme={theme}>
+              <GlobalStyles styles={{ a: { textDecoration: 'none' } }} />
               <CssBaseline />
               {children}
             </ThemeProvider>

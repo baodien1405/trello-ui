@@ -1,6 +1,7 @@
 import { MouseEvent, useState } from 'react'
 import { toast } from 'react-toastify'
 import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 
 import Logout from '@mui/icons-material/Logout'
 import PersonAdd from '@mui/icons-material/PersonAdd'
@@ -18,7 +19,6 @@ import { useConfirm } from 'material-ui-confirm'
 import { useAppStore, useLogoutMutation } from '@/hooks'
 import { RoutePath } from '@/constants'
 import { removeAccessTokenToLS, removeRefreshTokenToLS, removeUserToLS } from '@/utils'
-import Link from 'next/link'
 
 export function Profiles() {
   const confirm = useConfirm()
@@ -91,7 +91,7 @@ export function Profiles() {
           'aria-labelledby': 'basic-button-profiles'
         }}
       >
-        <Link href={RoutePath.ACCOUNT}>
+        <Link href={RoutePath.ACCOUNT} style={{ color: 'inherit' }}>
           <MenuItem
             sx={{
               '&:hover': {

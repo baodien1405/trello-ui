@@ -37,11 +37,10 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     <QueryClientProvider client={queryClient}>
       <ConfirmProvider defaultOptions={DEFAULT_CONFIRM_OPTIONS}>
         {children}
-
         <RefreshToken />
-        <ReactQueryDevtools initialIsOpen={false} />
         <ToastContainer />
       </ConfirmProvider>
+      <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
   )
 }

@@ -1,5 +1,6 @@
 'use client'
 
+import Link from 'next/link'
 import { useState } from 'react'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
@@ -18,6 +19,7 @@ import LibraryAddIcon from '@mui/icons-material/LibraryAdd'
 import SearchIcon from '@mui/icons-material/Search'
 import CloseIcon from '@mui/icons-material/Close'
 
+import { RoutePath } from '@/constants'
 import ModeSelect from '@/components/mode-select'
 import { TrelloIcon } from '@/assets'
 import { Profiles, Recent, Starred, Templates, Workspaces } from './menu-list'
@@ -43,17 +45,21 @@ export default function AppBar() {
       }}
     >
       <Stack direction="row" alignItems="center" gap={2}>
-        <AppsIcon sx={{ color: 'white' }} />
+        <Link href={RoutePath.BOARDS}>
+          <AppsIcon sx={{ color: 'white', verticalAlign: 'middle' }} />
+        </Link>
 
-        <Stack direction="row" alignItems="center" gap={0.5}>
-          <SvgIcon fontSize="small" inheritViewBox sx={{ color: 'white' }}>
-            <TrelloIcon height="20px" width="20px" />
-          </SvgIcon>
+        <Link href={RoutePath.HOME}>
+          <Stack direction="row" alignItems="center" gap={0.5}>
+            <SvgIcon fontSize="small" inheritViewBox sx={{ color: 'white' }}>
+              <TrelloIcon height="20px" width="20px" />
+            </SvgIcon>
 
-          <Typography variant="body2" fontSize="1.2rem" fontWeight="bold" color="white">
-            Trello
-          </Typography>
-        </Stack>
+            <Typography variant="body2" fontSize="1.2rem" fontWeight="bold" color="white">
+              Trello
+            </Typography>
+          </Stack>
+        </Link>
 
         <Box sx={{ display: { xs: 'none', md: 'flex' }, gap: 1 }}>
           <Workspaces />
