@@ -1,5 +1,7 @@
 'use client'
 
+import { useForm } from 'react-hook-form'
+import { toast } from 'react-toastify'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import TextField from '@mui/material/TextField'
@@ -9,12 +11,21 @@ import PasswordIcon from '@mui/icons-material/Password'
 import LockResetIcon from '@mui/icons-material/LockReset'
 import LockIcon from '@mui/icons-material/Lock'
 import LogoutIcon from '@mui/icons-material/Logout'
-
-import { useForm } from 'react-hook-form'
+import { CircularProgress } from '@mui/material'
 import { useConfirm } from 'material-ui-confirm'
+import { useRouter } from 'next/navigation'
+
 import FieldErrorAlert from '@/components/field-error-alert'
+import { UserPayload } from '@/models'
+import { useLogoutMutation, useUpdateUserMutation } from '@/hooks'
+import { RoutePath } from '@/constants'
+import { removeAccessTokenToLS, removeRefreshTokenToLS, removeUserToLS } from '@/utils'
 
 export function SecurityTab() {
+  const { mutateAsync: mutateAsyncUpdateUser, isPending: isUserUpdating } = useUpdateUserMutation()
+  const { mutateAsync: mutateAsyncLogout, isPending: isLoggingOut } = useLogoutMutation()
+  const router = useRouter()
+
   const {
     register,
     handleSubmit,
@@ -23,7 +34,7 @@ export function SecurityTab() {
 
   const confirmChangePassword = useConfirm()
 
-  const submitChangePassword = (data: any) => {
+  const submitChangePassword = ({ current_password, new_password }: UserPayload) => {
     confirmChangePassword({
       title: (
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
@@ -32,15 +43,26 @@ export function SecurityTab() {
       ),
       description: 'You have to login again after successfully changing your password. Continue?',
       confirmationText: 'Confirm',
-      cancellationText: 'Cancel'
+      cancellationText: 'Cancel',
+      confirmationButtonProps: {
+        startIcon:
+          isUserUpdating || isLoggingOut ? <CircularProgress color="inherit" size="1em" /> : null,
+        disabled: isUserUpdating || isLoggingOut
+      }
     })
       .then(() => {
-        const { current_password, new_password, new_password_confirmation } = data
-        console.log('current_password: ', current_password)
-        console.log('new_password: ', new_password)
-        console.log('new_password_confirmation: ', new_password_confirmation)
-
-        // Gọi API...
+        mutateAsyncUpdateUser({
+          current_password,
+          new_password
+        }).then(() => {
+          mutateAsyncLogout().then(() => {
+            router.push(RoutePath.LOGIN)
+            removeAccessTokenToLS()
+            removeRefreshTokenToLS()
+            removeUserToLS()
+          })
+          toast.success('Successfully changed your password, please login again!')
+        })
       })
       .catch(() => {})
   }

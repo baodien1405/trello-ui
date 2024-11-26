@@ -11,5 +11,6 @@ export const ApiEndpoint = {
   COLUMN_ADD: '/v1/api/columns',
   COLUMN_UPDATE: '/v1/api/columns/{columnId}',
   COLUMN_DELETE: '/v1/api/columns/{columnId}',
-  CARD_ADD: '/v1/api/cards'
+  CARD_ADD: '/v1/api/cards',
+  USER_UPDATE: '/v1/api/users'
 }

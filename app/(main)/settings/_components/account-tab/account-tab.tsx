@@ -1,5 +1,8 @@
 'use client'
 
+import { ChangeEvent } from 'react'
+import { useForm } from 'react-hook-form'
+import { toast } from 'react-toastify'
 import { styled } from '@mui/material/styles'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
@@ -12,13 +15,12 @@ import CloudUploadIcon from '@mui/icons-material/CloudUpload'
 import MailIcon from '@mui/icons-material/Mail'
 import AccountBoxIcon from '@mui/icons-material/AccountBox'
 import AssignmentIndIcon from '@mui/icons-material/AssignmentInd'
+import CircularProgress from '@mui/material/CircularProgress'
 
-import { useForm } from 'react-hook-form'
-import { toast } from 'react-toastify'
 import { singleFileValidator } from '@/utils'
-import { ChangeEvent } from 'react'
-import { useAppStore } from '@/hooks'
+import { useAppStore, useUpdateUserMutation } from '@/hooks'
 import FieldErrorAlert from '@/components/field-error-alert'
+import { UserPayload } from '@/models'
 
 // Xử lý custom đẹp cái input file ở đây: https://mui.com/material-ui/react-button/#file-upload
 // Ngoài ra note thêm lib này từ docs của MUI nó recommend nếu cần dùng: https://github.com/viclafouch/mui-file-input
@@ -36,6 +38,8 @@ const VisuallyHiddenInput = styled('input')({
 
 export function AccountTab() {
   const currentUser = useAppStore((state) => state.currentUser)
+  const setCurrentUser = useAppStore((state) => state.setCurrentUser)
+  const { mutateAsync, isPending } = useUpdateUserMutation()
 
   const {
     register,
@@ -47,13 +51,13 @@ export function AccountTab() {
     }
   })
 
-  const submitChangeGeneralInformation = (data: any) => {
-    const { displayName } = data
-    console.log('displayName: ', displayName)
+  const submitChangeGeneralInformation = async (formValues: UserPayload) => {
+    if (formValues.displayName === currentUser?.displayName) return
 
-    if (displayName === currentUser?.displayName) return
+    const response = await mutateAsync(formValues)
 
-    // Gọi API...
+    setCurrentUser(response.metadata)
+    toast.success('User updated successfully!')
   }
 
   const uploadAvatar = (e: ChangeEvent<HTMLInputElement>) => {
@@ -182,11 +186,12 @@ export function AccountTab() {
 
             <Box>
               <Button
-                className="interceptor-loading"
                 type="submit"
                 variant="contained"
                 color="primary"
                 fullWidth
+                disabled={isPending}
+                startIcon={isPending ? <CircularProgress color="inherit" size="1em" /> : null}
               >
                 Update
               </Button>
