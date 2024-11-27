@@ -1,7 +1,7 @@
 'use client'
 
 import { Roboto } from 'next/font/google'
-import { extendTheme } from '@mui/material/styles'
+import { createTheme } from '@mui/material/styles'
 
 const roboto = Roboto({
   weight: ['300', '400', '500', '700'],
@@ -36,7 +36,7 @@ const BOARD_CONTENT_HEIGHT = `calc(100vh - ${APP_BAR_HEIGHT} -  ${BOARD_BAR_HEIG
 const COLUMN_HEADER_HEIGHT = '50px'
 const COLUMN_FOOTER_HEIGHT = '56px'
 
-export const theme = extendTheme({
+export const theme = createTheme({
   trello: {
     appBarHeight: APP_BAR_HEIGHT,
     boardBarHeight: BOARD_BAR_HEIGHT,

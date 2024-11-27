@@ -1,3 +1,6 @@
+import { Suspense } from 'react'
+import { Metadata } from 'next'
+import Link from 'next/link'
 import AutoAwesomeMosaicIcon from '@mui/icons-material/AutoAwesomeMosaic'
 import LockIcon from '@mui/icons-material/Lock'
 import { Card as MuiCard } from '@mui/material'
@@ -5,10 +8,14 @@ import Avatar from '@mui/material/Avatar'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import Zoom from '@mui/material/Zoom'
-import Link from 'next/link'
 
 import { Author } from '@/app/(auth)/_components'
 import { AlertMessage, LoginForm } from '@/app/(auth)/login/_components'
+
+export const metadata: Metadata = {
+  title: 'Login',
+  description: 'This is a login page'
+}
 
 export default function LoginPage() {
   return (
@@ -32,7 +39,9 @@ export default function LoginPage() {
 
         <Author />
 
-        <AlertMessage />
+        <Suspense>
+          <AlertMessage />
+        </Suspense>
 
         <LoginForm />
 

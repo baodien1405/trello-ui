@@ -1,32 +1,32 @@
-'use client'
-
-import React from 'react'
+import { Metadata } from 'next'
 import Container from '@mui/material/Container'
-import Grid from '@mui/material/Grid2'
-import Typography from '@mui/material/Typography'
 import Box from '@mui/material/Box'
+import Grid from '@mui/material/Grid2'
 
-import { useBoardListQuery } from '@/hooks'
 import AppBar from '@/components/app-bar'
-import { BoardList } from './components'
+import { BoardList, BoardSidebar } from './components'
+
+export const metadata: Metadata = {
+  title: 'Boards',
+  description: 'This is a boards page'
+}
 
 export default function BoardsPage() {
-  const { data, isLoading } = useBoardListQuery({ page: 1, limit: 10 })
-
   return (
-    <Container disableGutters maxWidth={false} sx={{ height: '100vh' }}>
+    <Container disableGutters maxWidth={false}>
       <AppBar />
 
-      <Grid container columns={12}>
-        <Grid size={{ xs: 4 }}>
-          <Box>Sidebar</Box>
-        </Grid>
+      <Box sx={{ px: 2, my: 4 }}>
+        <Grid container spacing={2}>
+          <Grid size={{ xs: 12, sm: 3 }}>
+            <BoardSidebar />
+          </Grid>
 
-        <Grid size={{ xs: 4 }} padding={2}>
-          <Typography marginBottom={2}>Your board</Typography>
-          <BoardList boardList={data?.metadata.results || []} loading={isLoading} />
+          <Grid size={{ xs: 12, sm: 9 }}>
+            <BoardList />
+          </Grid>
         </Grid>
-      </Grid>
+      </Box>
     </Container>
   )
 }

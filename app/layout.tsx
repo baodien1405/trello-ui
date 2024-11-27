@@ -8,8 +8,6 @@ import GlobalStyles from '@mui/material/GlobalStyles'
 import { AppProvider } from '@/providers'
 import { theme } from '@/utils'
 
-import './globals.css'
-
 export const metadata: Metadata = {
   title: 'Trello',
   description: 'Build a Trello application'

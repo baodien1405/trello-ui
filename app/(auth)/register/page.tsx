@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { Metadata } from 'next'
 
 import Box from '@mui/material/Box'
 import Avatar from '@mui/material/Avatar'
@@ -10,6 +11,11 @@ import Zoom from '@mui/material/Zoom'
 
 import { Author } from '@/app/(auth)/_components'
 import { RegisterForm } from '@/app/(auth)/register/_components'
+
+export const metadata: Metadata = {
+  title: 'Register',
+  description: 'This is a register page'
+}
 
 export default function RegisterPage() {
   return (

@@ -1,12 +1,12 @@
 export interface ListParams {
-  page: string | number
-  limit: string | number
+  page: number
+  limit: number
 }
 
 export interface Pagination {
-  page: string
-  limit: string
-  totalRows: string
+  page: number
+  limit: number
+  totalRows: number
 }
 
 export interface ListResponse<T> {

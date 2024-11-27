@@ -1,6 +1,7 @@
 import { Metadata } from 'next'
 
 import { RefreshToken } from '@/app/(auth)/refresh-token/_components'
+import { Suspense } from 'react'
 
 export const metadata: Metadata = {
   title: 'Refresh token redirect',
@@ -11,5 +12,9 @@ export const metadata: Metadata = {
 }
 
 export default function RefreshTokenPage() {
-  return <RefreshToken />
+  return (
+    <Suspense>
+      <RefreshToken />
+    </Suspense>
+  )
 }

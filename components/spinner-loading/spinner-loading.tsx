@@ -14,8 +14,10 @@ export default function SpinnerLoading({ caption }: SpinnerLoadingProps) {
         alignItems: 'center',
         justifyContent: 'center',
         gap: 2,
-        width: '100vw',
-        height: '100vh'
+        position: 'fixed',
+        inset: 0,
+        zIndex: 9999,
+        bgcolor: (theme) => (theme.palette.mode === 'dark' ? '#121212' : '#ffffff')
       }}
     >
       <CircularProgress />
