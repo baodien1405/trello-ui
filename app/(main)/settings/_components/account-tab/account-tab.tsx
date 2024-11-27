@@ -60,7 +60,7 @@ export function AccountTab() {
     toast.success('User updated successfully!')
   }
 
-  const uploadAvatar = (e: ChangeEvent<HTMLInputElement>) => {
+  const uploadAvatar = async (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target?.files?.[0]
     if (!file) return
 
@@ -70,10 +70,15 @@ export function AccountTab() {
       return
     }
 
-    const reqData = new FormData()
-    reqData.append('avatar', file)
+    const formData = new FormData()
+    formData.append('avatar', file)
 
-    // Gọi API...
+    const response = await mutateAsync(formData)
+
+    setCurrentUser(response.metadata)
+    toast.success('User updated successfully!')
+
+    e.target.value = ''
   }
 
   return (
