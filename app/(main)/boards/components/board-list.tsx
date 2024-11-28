@@ -1,27 +1,31 @@
 'use client'
 
-import { useState } from 'react'
 import Link from 'next/link'
 import Grid from '@mui/material/Grid2'
 import Typography from '@mui/material/Typography'
-import Box from '@mui/material/Box'
+import Stack from '@mui/material/Stack'
 import Pagination from '@mui/material/Pagination'
 import PaginationItem from '@mui/material/PaginationItem'
+import { useSearchParams } from 'next/navigation'
 
 import { BoardCard } from './board-card'
 import { useBoardListQuery } from '@/hooks'
 import SpinnerLoading from '@/components/spinner-loading'
 
 export function BoardList() {
-  const [filters] = useState({ page: 1, limit: 12 })
+  const searchParams = useSearchParams()
+  const boardFilters = {
+    page: Number(searchParams.get('page') || 1),
+    limit: Number(searchParams.get('limit') || 1)
+  }
+  const { data, isPending } = useBoardListQuery(boardFilters)
 
-  const { data, isPending } = useBoardListQuery(filters)
-  const pagination = data?.metadata.pagination || {
+  const { page, limit, totalRows } = data?.metadata.pagination || {
     page: 1,
     limit: 12,
     totalRows: 0
   }
-
+  const totalPages = Boolean(totalRows) ? Math.ceil(totalRows / limit) : 0
   const boardList = data?.metadata.results || []
 
   if (isPending) {
@@ -49,32 +53,25 @@ export function BoardList() {
           </Grid>
         ))}
 
-        <Box
-          sx={{
-            my: 3,
-            pr: 5,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'flex-end',
-            width: '100%'
-          }}
-        >
-          <Pagination
-            size="large"
-            color="secondary"
-            showFirstButton
-            showLastButton
-            count={Math.ceil(pagination.totalRows / pagination.limit)}
-            page={pagination.page}
-            renderItem={(item) => (
-              <PaginationItem
-                component={Link}
-                href={`/boards${item.page === 1 ? '' : `?page=${item.page}`}`}
-                {...item}
-              />
-            )}
-          />
-        </Box>
+        {totalPages > 0 && (
+          <Stack alignItems="flex-end" width="100%" my={3} pr={5}>
+            <Pagination
+              size="large"
+              color="secondary"
+              showFirstButton
+              showLastButton
+              count={totalPages}
+              page={page}
+              renderItem={(item) => (
+                <PaginationItem
+                  component={Link}
+                  href={`/boards${item.page === 0 ? '' : `?page=${item.page}`}`}
+                  {...item}
+                />
+              )}
+            />
+          </Stack>
+        )}
       </Grid>
     </>
   )

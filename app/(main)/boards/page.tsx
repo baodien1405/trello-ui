@@ -1,3 +1,4 @@
+import { Suspense } from 'react'
 import { Metadata } from 'next'
 import Container from '@mui/material/Container'
 import Box from '@mui/material/Box'
@@ -23,7 +24,9 @@ export default function BoardsPage() {
           </Grid>
 
           <Grid size={{ xs: 12, sm: 9 }}>
-            <BoardList />
+            <Suspense>
+              <BoardList />
+            </Suspense>
           </Grid>
         </Grid>
       </Box>
