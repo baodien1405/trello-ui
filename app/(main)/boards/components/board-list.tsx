@@ -4,29 +4,27 @@ import Link from 'next/link'
 import Grid from '@mui/material/Grid2'
 import Typography from '@mui/material/Typography'
 import Stack from '@mui/material/Stack'
-import Pagination from '@mui/material/Pagination'
+import { Pagination as MUIPagination } from '@mui/material'
 import PaginationItem from '@mui/material/PaginationItem'
 import { useSearchParams } from 'next/navigation'
 
 import { BoardCard } from './board-card'
 import { useBoardListQuery } from '@/hooks'
 import SpinnerLoading from '@/components/spinner-loading'
+import { RoutePath } from '@/constants'
+import { Pagination } from '@/models'
 
 export function BoardList() {
   const searchParams = useSearchParams()
   const boardFilters = {
     page: Number(searchParams.get('page') || 1),
-    limit: Number(searchParams.get('limit') || 1)
+    limit: Number(searchParams.get('limit') || 12)
   }
   const { data, isPending } = useBoardListQuery(boardFilters)
 
-  const { page, limit, totalRows } = data?.metadata.pagination || {
-    page: 1,
-    limit: 12,
-    totalRows: 0
-  }
+  const boardList = data?.metadata?.results || []
+  const { page, limit, totalRows } = new Pagination(data?.metadata.pagination)
   const totalPages = Boolean(totalRows) ? Math.ceil(totalRows / limit) : 0
-  const boardList = data?.metadata.results || []
 
   if (isPending) {
     return <SpinnerLoading caption="Loading boards..." />
@@ -42,10 +40,6 @@ export function BoardList() {
 
   return (
     <>
-      <Typography variant="h4" sx={{ fontWeight: 'bold', mb: 3 }}>
-        Your boards:
-      </Typography>
-
       <Grid container spacing={2}>
         {boardList.map((board) => (
           <Grid columns={{ xs: 2, sm: 3, md: 4 }} key={board._id}>
@@ -55,7 +49,7 @@ export function BoardList() {
 
         {totalPages > 0 && (
           <Stack alignItems="flex-end" width="100%" my={3} pr={5}>
-            <Pagination
+            <MUIPagination
               size="large"
               color="secondary"
               showFirstButton
@@ -65,7 +59,7 @@ export function BoardList() {
               renderItem={(item) => (
                 <PaginationItem
                   component={Link}
-                  href={`/boards${item.page === 0 ? '' : `?page=${item.page}`}`}
+                  href={`${RoutePath.BOARDS}${item.page === 1 ? '' : `?page=${item.page}`}`}
                   {...item}
                 />
               )}

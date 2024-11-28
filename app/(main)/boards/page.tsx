@@ -3,6 +3,7 @@ import { Metadata } from 'next'
 import Container from '@mui/material/Container'
 import Box from '@mui/material/Box'
 import Grid from '@mui/material/Grid2'
+import Typography from '@mui/material/Typography'
 
 import AppBar from '@/components/app-bar'
 import { BoardList, BoardSidebar } from './components'
@@ -24,6 +25,10 @@ export default function BoardsPage() {
           </Grid>
 
           <Grid size={{ xs: 12, sm: 9 }}>
+            <Typography variant="h4" sx={{ fontWeight: 'bold', mb: 3 }}>
+              Your boards:
+            </Typography>
+
             <Suspense>
               <BoardList />
             </Suspense>
