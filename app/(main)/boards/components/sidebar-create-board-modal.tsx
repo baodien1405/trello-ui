@@ -1,5 +1,6 @@
 'use client'
 
+import { toast } from 'react-toastify'
 import { useState } from 'react'
 import { useForm, Controller } from 'react-hook-form'
 import { styled } from '@mui/material/styles'
@@ -16,9 +17,12 @@ import Button from '@mui/material/Button'
 import Radio from '@mui/material/Radio'
 import RadioGroup from '@mui/material/RadioGroup'
 import FormControlLabel from '@mui/material/FormControlLabel'
+import CircularProgress from '@mui/material/CircularProgress'
 
 import FieldErrorAlert from '@/components/field-error-alert'
-import { FIELD_REQUIRED_MESSAGE } from '@/constants'
+import { BOARD_TYPES, FIELD_REQUIRED_MESSAGE } from '@/constants'
+import { Board } from '@/models'
+import { useAddBoardMutation } from '@/hooks'
 
 const SidebarItem = styled(Box)(({ theme }) => ({
   display: 'flex',
@@ -37,16 +41,6 @@ const SidebarItem = styled(Box)(({ theme }) => ({
   }
 }))
 
-// BOARD_TYPES tương tự bên model phía Back-end (nếu cần dùng nhiều nơi thì hãy đưa ra file constants, không thì cứ để ở đây)
-const BOARD_TYPES = {
-  PUBLIC: 'public',
-  PRIVATE: 'private'
-}
-
-/**
- * Bản chất của cái component SidebarCreateBoardModal này chúng ta sẽ trả về một cái SidebarItem để hiển thị ở màn Board List cho phù hợp giao diện bên đó, đồng thời nó cũng chứa thêm một cái Modal để xử lý riêng form create board nhé.
- * Note: Modal là một low-component mà bọn MUI sử dụng bên trong những thứ như Dialog, Drawer, Menu, Popover. Ở đây dĩ nhiên chúng ta có thể sử dụng Dialog cũng không thành vấn đề gì, nhưng sẽ sử dụng Modal để dễ linh hoạt tùy biến giao diện từ con số 0 cho phù hợp với mọi nhu cầu nhé.
- */
 export function SidebarCreateBoardModal() {
   const {
     control,
@@ -57,21 +51,27 @@ export function SidebarCreateBoardModal() {
   } = useForm()
 
   const [isOpen, setIsOpen] = useState(false)
-  const handleOpenModal = () => setIsOpen(true)
+
+  const { mutateAsync: addBoardMutateAsync, isPending: isBoardAdding } = useAddBoardMutation()
+
+  const handleOpenModal = () => {
+    setIsOpen(true)
+  }
+
   const handleCloseModal = () => {
     setIsOpen(false)
-    // Reset lại toàn bộ form khi đóng Modal
     reset()
   }
 
-  const submitCreateNewBoard = (data: any) => {
-    const { title, description, type } = data
-    console.log('Board title: ', title)
-    console.log('Board description: ', description)
-    console.log('Board type: ', type)
+  const submitCreateNewBoard = async (data: Partial<Board>) => {
+    const response = await addBoardMutateAsync(data)
+
+    toast.success(response.message, {
+      theme: 'colored'
+    })
+    handleCloseModal()
   }
 
-  // <>...</> nhắc lại cho bạn anof chưa biết hoặc quên nhé: nó là React Fragment, dùng để bọc các phần tử lại mà không cần chỉ định DOM Node cụ thể nào cả.
   return (
     <>
       <SidebarItem onClick={handleOpenModal}>
@@ -81,7 +81,6 @@ export function SidebarCreateBoardModal() {
 
       <Modal
         open={isOpen}
-        // onClose={handleCloseModal} // chỉ sử dụng onClose trong trường hợp muốn đóng Modal bằng nút ESC hoặc click ra ngoài Modal
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
@@ -176,11 +175,6 @@ export function SidebarCreateBoardModal() {
                   <FieldErrorAlert errors={errors} fieldName={'description'} />
                 </Box>
 
-                {/*
-                 * Lưu ý đối với RadioGroup của MUI thì không thể dùng register tương tự TextField được mà phải sử dụng <Controller /> và props "control" của react-hook-form như cách làm dưới đây
-                 * https://stackoverflow.com/a/73336101
-                 * https://mui.com/material-ui/react-radio-button/
-                 */}
                 <Controller
                   name="type"
                   defaultValue={BOARD_TYPES.PUBLIC}
@@ -210,10 +204,13 @@ export function SidebarCreateBoardModal() {
 
                 <Box sx={{ alignSelf: 'flex-end' }}>
                   <Button
-                    className="interceptor-loading"
                     type="submit"
                     variant="contained"
                     color="primary"
+                    disabled={isBoardAdding}
+                    startIcon={
+                      isBoardAdding ? <CircularProgress color="inherit" size="1em" /> : null
+                    }
                   >
                     Create
                   </Button>

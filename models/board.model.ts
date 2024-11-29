@@ -6,6 +6,7 @@ export interface Board {
   title: string
   description: string
   slug: string
+  type: string
   columnOrderIds: string[]
   columns: Column[]
   createdAt: number

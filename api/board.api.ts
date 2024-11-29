@@ -15,6 +15,9 @@ export const boardApi = {
   get(boardId: string): Promise<SuccessResponse<Board>> {
     return axiosClient.get(ApiEndpoint.BOARD_GET_DETAIL.replace('{boardId}', boardId))
   },
+  add(payload: Partial<Board>): Promise<SuccessResponse<Board>> {
+    return axiosClient.post(ApiEndpoint.BOARD_GET_LIST, payload)
+  },
   update(boardId: string, payload: Partial<Board>): Promise<SuccessResponse<Board>> {
     return axiosClient.patch(ApiEndpoint.BOARD_GET_DETAIL.replace('{boardId}', boardId), payload)
   },
