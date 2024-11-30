@@ -1,3 +1,5 @@
+'use client'
+
 import Box from '@mui/material/Box'
 import {
   Active,
@@ -25,6 +27,7 @@ import { boardApi, columnApi } from '@/api'
 import { ColumnList } from '@/app/(main)/boards/[boardId]/components/column-list'
 import { Column } from '@/app/(main)/boards/[boardId]/components/column'
 import { Card } from '@/app/(main)/boards/[boardId]/components/card'
+import { useUpdateColumnMutation } from '@/hooks'
 
 const ACTIVE_DRAG_ITEM_TYPE = {
   COLUMN: 'ACTIVE_DRAG_ITEM_TYPE_COLUMN',
@@ -56,6 +59,7 @@ export function BoardContent({ board }: BoardContentProps) {
   const [oldColumnWhenDraggingCard, setOldColumnWhenDraggingCard] = useState<any>(null)
 
   const lastOverId = useRef<UniqueIdentifier | null>(null)
+  const { mutateAsync: updateColumnMutateAsync } = useUpdateColumnMutation()
 
   const customDropAnimation: DropAnimation = {
     sideEffects: defaultDropAnimationSideEffects({
@@ -295,7 +299,10 @@ export function BoardContent({ board }: BoardContentProps) {
           return nextColumnList
         })
 
-        columnApi.update(oldColumnWhenDraggingCard._id, { cardOrderIds: cardOrderIdList })
+        updateColumnMutateAsync({
+          cardOrderIds: cardOrderIdList,
+          columnId: oldColumnWhenDraggingCard._id
+        })
       }
     }
 

@@ -1,3 +1,5 @@
+'use client'
+
 import { toast } from 'react-toastify'
 import { useConfirm } from 'material-ui-confirm'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
@@ -20,18 +22,19 @@ import ListItemText from '@mui/material/ListItemText'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import Tooltip from '@mui/material/Tooltip'
-import Typography from '@mui/material/Typography'
 import CloseIcon from '@mui/icons-material/Close'
 import TextField from '@mui/material/TextField'
+import CircularProgress from '@mui/material/CircularProgress'
 
 import { CardList } from '../card-list'
-import { CardPayload } from '@/models'
-import { cardApi, columnApi } from '@/api'
+import { CardPayload, Column as ColumnInterface } from '@/models'
+import { cardApi } from '@/api'
 import { QueryKeys } from '@/constants'
-import { CircularProgress } from '@mui/material'
+import ToggleFocusInput from '@/components/toggle-focus-input'
+import { useDeleteColumnMutation, useUpdateColumnMutation } from '@/hooks'
 
 interface ColumnProps {
-  column: any
+  column: ColumnInterface
 }
 
 export function Column({ column }: ColumnProps) {
@@ -53,13 +56,11 @@ export function Column({ column }: ColumnProps) {
   const [anchorEl, setAnchorEl] = useState<null | SVGSVGElement>(null)
   const open = Boolean(anchorEl)
   const queryClient = useQueryClient()
+  const { mutateAsync: updateColumnMutateAsync } = useUpdateColumnMutation()
+  const { mutateAsync: deleteColumnMutateAsync } = useDeleteColumnMutation()
 
   const addCardMutation = useMutation({
     mutationFn: (payload: CardPayload) => cardApi.add(payload)
-  })
-
-  const deleteColumnMutation = useMutation({
-    mutationFn: (columnId: string) => columnApi.delete(columnId)
   })
 
   const orderedCardList = column.cards
@@ -101,7 +102,7 @@ export function Column({ column }: ColumnProps) {
       cancellationText: 'Cancel'
     })
       .then(() => {
-        deleteColumnMutation.mutate(column._id, {
+        deleteColumnMutateAsync(column._id, {
           onSuccess: (data) => {
             toast.success(data.metadata.deleteResult)
             queryClient.invalidateQueries({
@@ -120,8 +121,13 @@ export function Column({ column }: ColumnProps) {
   const handleClick = (event: MouseEvent<SVGSVGElement>) => {
     setAnchorEl(event.currentTarget)
   }
+
   const handleClose = () => {
     setAnchorEl(null)
+  }
+
+  const handleUpdateTitle = (newTitle: string) => {
+    updateColumnMutateAsync({ title: newTitle, columnId: column._id })
   }
 
   return (
@@ -148,9 +154,12 @@ export function Column({ column }: ColumnProps) {
             justifyContent: 'space-between'
           }}
         >
-          <Typography variant="h6" sx={{ fontSize: '1rem', fontWeight: 'bold', cursor: 'pointer' }}>
-            {column?.title}
-          </Typography>
+          <ToggleFocusInput
+            value={column?.title}
+            onChangedValue={handleUpdateTitle}
+            data-no-dnd="true"
+          />
+
           <Box>
             <Tooltip title="More options">
               <ExpandMoreIcon

@@ -6,8 +6,11 @@ export const columnApi = {
   add(payload: ColumnPayload): Promise<SuccessResponse<Column>> {
     return axiosClient.post(ApiEndpoint.COLUMN_ADD, payload)
   },
-  update(columnId: string, payload: Partial<Column>): Promise<SuccessResponse<Column>> {
-    return axiosClient.patch(ApiEndpoint.COLUMN_UPDATE.replace('{columnId}', columnId), payload)
+  update(payload: Partial<Column> & { columnId: string }): Promise<SuccessResponse<Column>> {
+    return axiosClient.patch(
+      ApiEndpoint.COLUMN_UPDATE.replace('{columnId}', payload.columnId),
+      payload
+    )
   },
   delete(columnId: string): Promise<SuccessResponse<{ deleteResult: string }>> {
     return axiosClient.delete(ApiEndpoint.COLUMN_UPDATE.replace('{columnId}', columnId))
