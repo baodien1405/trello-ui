@@ -12,7 +12,10 @@ import AddToDriveIcon from '@mui/icons-material/AddToDrive'
 import BoltIcon from '@mui/icons-material/Bolt'
 import FilterListIcon from '@mui/icons-material/FilterList'
 import PersonAddIcon from '@mui/icons-material/PersonAdd'
+
 import { convertTitleCase } from '@/utils'
+import { Board } from '@/models'
+import { BoardUserGroup } from '@/app/(main)/boards/components'
 
 const MENU_STYLES = {
   color: 'white',
@@ -29,7 +32,7 @@ const MENU_STYLES = {
 }
 
 interface BoardBarProps {
-  board: any
+  board: Board
 }
 
 export function BoardBar({ board }: BoardBarProps) {
@@ -74,72 +77,7 @@ export function BoardBar({ board }: BoardBarProps) {
           Invite
         </Button>
 
-        <AvatarGroup
-          max={7}
-          sx={{
-            gap: '10px',
-            '& .MuiAvatar-root': {
-              width: 34,
-              height: 34,
-              fontSize: 16,
-              border: 'none',
-              color: 'white',
-              cursor: 'pointer',
-              '&:first-of-type': {
-                bgcolor: '#a4b0be'
-              }
-            }
-          }}
-        >
-          <Tooltip title="baodien1405">
-            <Avatar
-              alt="avatar"
-              src="https://graph.facebook.com/1325702547590327/picture?width=400&height=400"
-            />
-          </Tooltip>
-          <Tooltip title="baodien1405">
-            <Avatar
-              alt="avatar"
-              src="https://graph.facebook.com/1325702547590327/picture?width=400&height=400"
-            />
-          </Tooltip>
-          <Tooltip title="baodien1405">
-            <Avatar
-              alt="avatar"
-              src="https://graph.facebook.com/1325702547590327/picture?width=400&height=400"
-            />
-          </Tooltip>
-          <Tooltip title="baodien1405">
-            <Avatar
-              alt="avatar"
-              src="https://graph.facebook.com/1325702547590327/picture?width=400&height=400"
-            />
-          </Tooltip>
-          <Tooltip title="baodien1405">
-            <Avatar
-              alt="avatar"
-              src="https://graph.facebook.com/1325702547590327/picture?width=400&height=400"
-            />
-          </Tooltip>
-          <Tooltip title="baodien1405">
-            <Avatar
-              alt="avatar"
-              src="https://graph.facebook.com/1325702547590327/picture?width=400&height=400"
-            />
-          </Tooltip>
-          <Tooltip title="baodien1405">
-            <Avatar
-              alt="avatar"
-              src="https://graph.facebook.com/1325702547590327/picture?width=400&height=400"
-            />
-          </Tooltip>
-          <Tooltip title="baodien1405">
-            <Avatar
-              alt="avatar"
-              src="https://graph.facebook.com/1325702547590327/picture?width=400&height=400"
-            />
-          </Tooltip>
-        </AvatarGroup>
+        <BoardUserGroup />
       </Stack>
     </Box>
   )

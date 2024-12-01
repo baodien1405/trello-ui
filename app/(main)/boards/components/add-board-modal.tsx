@@ -41,7 +41,7 @@ const SidebarItem = styled(Box)(({ theme }) => ({
   }
 }))
 
-export function SidebarCreateBoardModal() {
+export function AddBoardModal() {
   const {
     control,
     register,

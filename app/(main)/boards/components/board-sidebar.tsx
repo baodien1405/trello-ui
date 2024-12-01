@@ -8,7 +8,7 @@ import ListAltIcon from '@mui/icons-material/ListAlt'
 import HomeIcon from '@mui/icons-material/Home'
 import Divider from '@mui/material/Divider'
 
-import { SidebarCreateBoardModal } from '@/app/(main)/boards/components'
+import { AddBoardModal } from '@/app/(main)/boards/components'
 
 const SidebarItem = styled(Box)(({ theme }) => ({
   display: 'flex',
@@ -50,7 +50,7 @@ export function BoardSidebar() {
       <Divider sx={{ my: 1 }} />
 
       <Stack direction="column" spacing={1}>
-        <SidebarCreateBoardModal />
+        <AddBoardModal />
       </Stack>
     </>
   )
