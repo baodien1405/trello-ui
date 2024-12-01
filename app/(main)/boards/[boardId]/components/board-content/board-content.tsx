@@ -23,11 +23,12 @@ import { arrayMove } from '@dnd-kit/sortable'
 import cloneDeep from 'lodash.clonedeep'
 
 import { generatePlaceholderCard, MouseSensor, TouchSensor } from '@/utils'
-import { boardApi, columnApi } from '@/api'
+import { boardApi } from '@/api'
 import { ColumnList } from '@/app/(main)/boards/[boardId]/components/column-list'
 import { Column } from '@/app/(main)/boards/[boardId]/components/column'
 import { Card } from '@/app/(main)/boards/[boardId]/components/card'
 import { useUpdateColumnMutation } from '@/hooks'
+import { Board } from '@/models'
 
 const ACTIVE_DRAG_ITEM_TYPE = {
   COLUMN: 'ACTIVE_DRAG_ITEM_TYPE_COLUMN',
@@ -35,7 +36,7 @@ const ACTIVE_DRAG_ITEM_TYPE = {
 }
 
 interface BoardContentProps {
-  board: any
+  board: Board
 }
 
 export function BoardContent({ board }: BoardContentProps) {
