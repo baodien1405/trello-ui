@@ -1,3 +1,5 @@
+'use client'
+
 import { CSS } from '@dnd-kit/utilities'
 import { useSortable } from '@dnd-kit/sortable'
 import CommentIcon from '@mui/icons-material/Comment'
@@ -10,12 +12,14 @@ import Button from '@mui/material/Button'
 import CardActions from '@mui/material/CardActions'
 import CardContent from '@mui/material/CardContent'
 import CardMedia from '@mui/material/CardMedia'
+import { useAppStore } from '@/hooks'
 
 interface CardProps {
   card: any
 }
 
 export function Card({ card }: CardProps) {
+  const setActiveCard = useAppStore((state) => state.setActiveCard)
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
     id: card._id,
     data: { ...card }
@@ -47,6 +51,7 @@ export function Card({ card }: CardProps) {
           borderColor: (theme) => theme.palette.primary.main
         }
       }}
+      onClick={() => setActiveCard(card)}
     >
       {card.cover && <CardMedia sx={{ height: 140 }} image={card.cover} />}
       <CardContent
