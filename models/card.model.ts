@@ -4,6 +4,7 @@ export interface Card {
   columnId: string
   title: string
   description?: string
+  cover: string | null
 }
 
 export interface CardPayload {

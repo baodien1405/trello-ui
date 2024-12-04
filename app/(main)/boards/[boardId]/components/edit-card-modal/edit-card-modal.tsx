@@ -35,7 +35,8 @@ import { singleFileValidator } from '@/utils'
 import { CardUserGroup } from '@/app/(main)/boards/[boardId]/components/edit-card-modal/card-user-group'
 import { CardDescriptionMdEditor } from '@/app/(main)/boards/[boardId]/components/edit-card-modal/card-description-md-editor'
 import { CardActivitySection } from '@/app/(main)/boards/[boardId]/components/edit-card-modal/card-activity-section'
-import { useAppStore } from '@/hooks'
+import { useAppStore, useUpdateCardMutation } from '@/hooks'
+import { Card } from '@/models'
 
 const SidebarItem = styled(Box)<{ component?: string }>(({ theme }) => ({
   display: 'flex',
@@ -57,17 +58,25 @@ const SidebarItem = styled(Box)<{ component?: string }>(({ theme }) => ({
   }
 }))
 
-export function EditCardModal() {
-  const activeCard = useAppStore((state) => state.activeCard)
+interface EditCardModalProps {
+  activeCard: Card
+}
+
+export function EditCardModal({ activeCard }: EditCardModalProps) {
   const setActiveCard = useAppStore((state) => state.setActiveCard)
+  const updateCardMutation = useUpdateCardMutation(activeCard.boardId)
 
   const handleCloseModal = () => {
     setActiveCard(null)
   }
 
   const handleCardTitleChange = (newTitle: string) => {
-    console.log(newTitle.trim())
-    // Gọi API...
+    if (updateCardMutation.isPending) return
+
+    updateCardMutation.mutateAsync({
+      cardId: activeCard._id,
+      title: newTitle.trim()
+    })
   }
 
   const handleCardCoverUpload = (event: any) => {
@@ -114,15 +123,17 @@ export function EditCardModal() {
           />
         </Box>
 
-        <Box sx={{ mb: 4, width: '100%', height: '320px', position: 'relative' }}>
-          <Image
-            src="https://trungquandev.com/wp-content/uploads/2023/08/fit-banner-for-facebook-blog-trungquandev-codetq.png"
-            alt="card-cover"
-            fill
-            style={{ borderRadius: '6px', objectFit: 'cover' }}
-            priority
-          />
-        </Box>
+        {activeCard?.cover && (
+          <Box sx={{ mb: 4, width: '100%', height: '320px', position: 'relative' }}>
+            <Image
+              src="https://trungquandev.com/wp-content/uploads/2023/08/fit-banner-for-facebook-blog-trungquandev-codetq.png"
+              alt="card-cover"
+              fill
+              style={{ borderRadius: '6px', objectFit: 'cover' }}
+              priority
+            />
+          </Box>
+        )}
 
         <Box sx={{ mb: 1, mt: -3, pr: 2.5, display: 'flex', alignItems: 'center', gap: 1 }}>
           <CreditCardIcon />
@@ -137,7 +148,7 @@ export function EditCardModal() {
 
         <Grid container spacing={2} sx={{ mb: 3 }}>
           {/* Left side */}
-          <Grid columns={{ xs: 12, sm: 9 }}>
+          <Grid size={{ xs: 12, sm: 9 }}>
             <Box sx={{ mb: 3 }}>
               <Typography sx={{ fontWeight: '600', color: 'primary.main', mb: 1 }}>
                 Members
@@ -181,7 +192,7 @@ export function EditCardModal() {
           </Grid>
 
           {/* Right side */}
-          <Grid columns={{ xs: 12, sm: 3 }}>
+          <Grid size={{ xs: 12, sm: 3 }}>
             <Typography sx={{ fontWeight: '600', color: 'primary.main', mb: 1 }}>
               Add To Card
             </Typography>
