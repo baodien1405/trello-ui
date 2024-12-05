@@ -32,9 +32,9 @@ import DvrOutlinedIcon from '@mui/icons-material/DvrOutlined'
 import ToggleFocusInput from '@/components/toggle-focus-input'
 import VisuallyHiddenInput from '@/components/visually-hidden-input'
 import { singleFileValidator } from '@/utils'
-import { CardUserGroup } from '@/app/(main)/boards/[boardId]/components/edit-card-modal/card-user-group'
-import { CardDescriptionMdEditor } from '@/app/(main)/boards/[boardId]/components/edit-card-modal/card-description-md-editor'
-import { CardActivitySection } from '@/app/(main)/boards/[boardId]/components/edit-card-modal/card-activity-section'
+import { CardUserGroup } from '@/app/(main)/boards/[boardId]/components/active-card-modal/card-user-group'
+import { CardDescriptionMdEditor } from '@/app/(main)/boards/[boardId]/components/active-card-modal/card-description-md-editor'
+import { CardActivitySection } from '@/app/(main)/boards/[boardId]/components/active-card-modal/card-activity-section'
 import { useAppStore, useUpdateCardMutation } from '@/hooks'
 import { Card } from '@/models'
 
@@ -58,11 +58,11 @@ const SidebarItem = styled(Box)<{ component?: string }>(({ theme }) => ({
   }
 }))
 
-interface EditCardModalProps {
+interface ActiveCardModalProps {
   activeCard: Card
 }
 
-export function EditCardModal({ activeCard }: EditCardModalProps) {
+export function ActiveCardModal({ activeCard }: ActiveCardModalProps) {
   const setActiveCard = useAppStore((state) => state.setActiveCard)
   const updateCardMutation = useUpdateCardMutation(activeCard.boardId)
 
@@ -76,6 +76,15 @@ export function EditCardModal({ activeCard }: EditCardModalProps) {
     updateCardMutation.mutateAsync({
       cardId: activeCard._id,
       title: newTitle.trim()
+    })
+  }
+
+  const handleCardDescriptionChange = (newDescription?: string) => {
+    if (updateCardMutation.isPending) return
+
+    updateCardMutation.mutateAsync({
+      cardId: activeCard._id,
+      description: newDescription
     })
   }
 
@@ -138,7 +147,6 @@ export function EditCardModal({ activeCard }: EditCardModalProps) {
         <Box sx={{ mb: 1, mt: -3, pr: 2.5, display: 'flex', alignItems: 'center', gap: 1 }}>
           <CreditCardIcon />
 
-          {/* Feature 01: Xử lý tiêu đề của Card */}
           <ToggleFocusInput
             inputFontSize="22px"
             value={activeCard?.title}
@@ -147,7 +155,6 @@ export function EditCardModal({ activeCard }: EditCardModalProps) {
         </Box>
 
         <Grid container spacing={2} sx={{ mb: 3 }}>
-          {/* Left side */}
           <Grid size={{ xs: 12, sm: 9 }}>
             <Box sx={{ mb: 3 }}>
               <Typography sx={{ fontWeight: '600', color: 'primary.main', mb: 1 }}>
@@ -170,8 +177,11 @@ export function EditCardModal({ activeCard }: EditCardModalProps) {
                 </Typography>
               </Box>
 
-              {/* Feature 03: Xử lý mô tả của Card */}
-              <CardDescriptionMdEditor />
+              <CardDescriptionMdEditor
+                isDescriptionSaving={updateCardMutation.isPending}
+                description={activeCard.description}
+                onDescriptionChange={handleCardDescriptionChange}
+              />
             </Box>
 
             <Box sx={{ mb: 3 }}>
@@ -191,7 +201,6 @@ export function EditCardModal({ activeCard }: EditCardModalProps) {
             </Box>
           </Grid>
 
-          {/* Right side */}
           <Grid size={{ xs: 12, sm: 3 }}>
             <Typography sx={{ fontWeight: '600', color: 'primary.main', mb: 1 }}>
               Add To Card

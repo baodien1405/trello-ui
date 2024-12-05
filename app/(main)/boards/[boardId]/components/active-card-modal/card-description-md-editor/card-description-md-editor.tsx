@@ -1,33 +1,32 @@
 'use client'
 
 import { useState } from 'react'
-import { useColorScheme } from '@mui/material/styles'
 import MDEditor from '@uiw/react-md-editor'
 import rehypeSanitize from 'rehype-sanitize'
+import { useColorScheme } from '@mui/material/styles'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import EditNoteIcon from '@mui/icons-material/EditNote'
+import CircularProgress from '@mui/material/CircularProgress'
 
-const markdownValueExample = `
-  *\`Markdown Content Example:\`*
+interface CardDescriptionMdEditorProps {
+  description?: string
+  onDescriptionChange: (value?: string) => void
+  isDescriptionSaving?: boolean
+}
 
-  **Hello world | TrungQuanDev - Một Lập Trình Viên | Trello MERN Stack Advanced**
-  [![](https://avatars.githubusercontent.com/u/14128099?v=4&s=80)](https://avatars.githubusercontent.com/u/14128099?v=4)
-  \`\`\`javascript
-  import React from "react"
-  import ReactDOM from "react-dom"
-  import MDEditor from '@uiw/react-md-editor'
-  \`\`\`
-`
-
-export function CardDescriptionMdEditor() {
+export function CardDescriptionMdEditor({
+  description,
+  onDescriptionChange,
+  isDescriptionSaving
+}: CardDescriptionMdEditorProps) {
   const { mode } = useColorScheme()
   const [markdownEditMode, setMarkdownEditMode] = useState(false)
-  const [cardDescription, setCardDescription] = useState(markdownValueExample)
+  const [cardDescription, setCardDescription] = useState(description)
 
-  const updateCardDescription = () => {
+  const handleCardDescriptionUpdate = () => {
     setMarkdownEditMode(false)
-    console.log('cardDescription: ', cardDescription)
+    onDescriptionChange(cardDescription)
   }
 
   return (
@@ -46,8 +45,9 @@ export function CardDescriptionMdEditor() {
           </Box>
           <Button
             sx={{ alignSelf: 'flex-end' }}
-            onClick={updateCardDescription}
-            className="interceptor-loading"
+            onClick={handleCardDescriptionUpdate}
+            disabled={isDescriptionSaving}
+            startIcon={isDescriptionSaving ? <CircularProgress color="inherit" size="1em" /> : null}
             type="button"
             variant="contained"
             size="small"

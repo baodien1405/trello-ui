@@ -8,7 +8,7 @@ import { generatePlaceholderCard, mapOrder } from '@/utils'
 import { BoardBar } from '@/app/(main)/boards/[boardId]/components/board-bar'
 import { BoardContent } from '@/app/(main)/boards/[boardId]/components/board-content'
 import SpinnerLoading from '@/components/spinner-loading'
-import { EditCardModal } from '@/app/(main)/boards/[boardId]/components/edit-card-modal'
+import { ActiveCardModal } from '@/app/(main)/boards/[boardId]/components/active-card-modal'
 
 interface BoardDetailProps {
   boardId: string
@@ -36,7 +36,7 @@ export function BoardDetail({ boardId }: BoardDetailProps) {
 
   return (
     <Container disableGutters maxWidth={false} sx={{ height: '100vh' }}>
-      {activeCard && <EditCardModal activeCard={activeCard} />}
+      {activeCard && <ActiveCardModal activeCard={activeCard} />}
       <AppBar />
       <BoardBar board={board} />
       <BoardContent board={board} />
