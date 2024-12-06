@@ -110,6 +110,17 @@ export const theme = createTheme({
           '&.Mui-focused fieldset': { borderWidth: '1px !important' }
         }
       }
+    },
+    MuiTextField: {
+      styleOverrides: {
+        root: {
+          '& input:-webkit-autofill': {
+            WebkitBoxShadow: '0 0 0 100px transparent inset', // Set background to match your desired color
+            // WebkitTextFillColor: 'black', // Change text color
+            transition: 'background-color 5000s ease-in-out 0s'
+          }
+        }
+      }
     }
   }
 })

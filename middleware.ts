@@ -18,7 +18,7 @@ export function middleware(request: NextRequest) {
 
   if (refreshToken) {
     if (unAuthPaths.some((path) => pathname.startsWith(path)) && accessToken) {
-      return NextResponse.redirect(new URL(RoutePath.HOME, request.url))
+      return NextResponse.redirect(new URL(RoutePath.BOARDS, request.url))
     }
 
     if (privatePaths.some((path) => pathname.startsWith(path)) && !accessToken) {
