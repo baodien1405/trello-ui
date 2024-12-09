@@ -89,15 +89,18 @@ export function ActiveCardModal({ activeCard }: ActiveCardModalProps) {
   }
 
   const handleCardCoverUpload = (event: any) => {
+    if (updateCardMutation.isPending) return
+
     const error = singleFileValidator(event.target?.files[0])
     if (error) {
       toast.error(error)
       return
     }
-    const reqData = new FormData()
-    reqData.append('cardCover', event.target?.files[0])
+    const formData = new FormData()
+    formData.append('cardId', activeCard._id)
+    formData.append('cardCover', event.target?.files[0])
 
-    // Gọi API...
+    updateCardMutation.mutateAsync(formData).finally(() => (event.target.value = ''))
   }
 
   return (
@@ -135,11 +138,12 @@ export function ActiveCardModal({ activeCard }: ActiveCardModalProps) {
         {activeCard?.cover && (
           <Box sx={{ mb: 4, width: '100%', height: '320px', position: 'relative' }}>
             <Image
-              src="https://trungquandev.com/wp-content/uploads/2023/08/fit-banner-for-facebook-blog-trungquandev-codetq.png"
+              src={activeCard.cover}
               alt="card-cover"
               fill
               style={{ borderRadius: '6px', objectFit: 'cover' }}
               priority
+              loading="eager"
             />
           </Box>
         )}

@@ -7,7 +7,18 @@ export const cardApi = {
     return axiosClient.post(ApiEndpoint.CARD_ADD, payload)
   },
 
-  update(payload: Partial<Card> & { cardId: string }): Promise<SuccessResponse<Card>> {
-    return axiosClient.patch(ApiEndpoint.CARD_UPDATE.replace('{cardId}', payload.cardId), payload)
+  update(payload: (Partial<Card> & { cardId: string }) | FormData): Promise<SuccessResponse<Card>> {
+    const isFormData = payload instanceof FormData
+    const cardId = isFormData ? payload.get('cardId') : payload.cardId
+
+    return axiosClient.patch(
+      ApiEndpoint.CARD_UPDATE.replace('{cardId}', cardId as string),
+      payload,
+      {
+        headers: {
+          'Content-Type': isFormData ? 'multipart/form-data' : 'application/json'
+        }
+      }
+    )
   }
 }
