@@ -1,3 +1,5 @@
+import { Column } from '@/models'
+
 export const convertTitleCase = (title: string) => {
   if (!title) return ''
   const capitalize = (str: string) => str[0].toUpperCase() + str.slice(1)
@@ -13,11 +15,13 @@ export const convertTitleCase = (title: string) => {
   return capitalize(titleCase)
 }
 
-export const generatePlaceholderCard = (column: any) => {
+export const generatePlaceholderCard = (column: Column) => {
   return {
     _id: `${column._id}-placeholder-card`,
     boardId: column.boardId,
     columnId: column._id,
-    FE_PlaceholderCard: true
+    FE_PlaceholderCard: true,
+    title: '',
+    cover: null
   }
 }

@@ -64,31 +64,35 @@ interface ActiveCardModalProps {
 
 export function ActiveCardModal({ activeCard }: ActiveCardModalProps) {
   const setActiveCard = useAppStore((state) => state.setActiveCard)
-  const updateCardMutation = useUpdateCardMutation(activeCard.boardId)
+  const updateCardMutation = useUpdateCardMutation()
 
   const handleCloseModal = () => {
     setActiveCard(null)
   }
 
-  const handleCardTitleChange = (newTitle: string) => {
+  const handleCardTitleChange = async (newTitle: string) => {
     if (updateCardMutation.isPending) return
 
-    updateCardMutation.mutateAsync({
+    const response = await updateCardMutation.mutateAsync({
       cardId: activeCard._id,
       title: newTitle.trim()
     })
+
+    setActiveCard(response.metadata)
   }
 
-  const handleCardDescriptionChange = (newDescription?: string) => {
+  const handleCardDescriptionChange = async (newDescription?: string) => {
     if (updateCardMutation.isPending) return
 
-    updateCardMutation.mutateAsync({
+    const response = await updateCardMutation.mutateAsync({
       cardId: activeCard._id,
       description: newDescription
     })
+
+    setActiveCard(response.metadata)
   }
 
-  const handleCardCoverUpload = (event: any) => {
+  const handleCardCoverUpload = async (event: any) => {
     if (updateCardMutation.isPending) return
 
     const error = singleFileValidator(event.target?.files[0])
@@ -100,11 +104,13 @@ export function ActiveCardModal({ activeCard }: ActiveCardModalProps) {
     formData.append('cardId', activeCard._id)
     formData.append('cardCover', event.target?.files[0])
 
-    updateCardMutation.mutateAsync(formData).finally(() => (event.target.value = ''))
+    const response = await updateCardMutation.mutateAsync(formData)
+    setActiveCard(response.metadata)
+    event.target.value = ''
   }
 
   return (
-    <Modal disableScrollLock open={true} sx={{ overflowY: 'auto' }}>
+    <Modal disableScrollLock open={Boolean(activeCard)} sx={{ overflowY: 'auto' }}>
       <Box
         sx={{
           position: 'relative',

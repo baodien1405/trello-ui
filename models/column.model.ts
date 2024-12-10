@@ -1,7 +1,9 @@
+import { Card } from '@/models/card.model'
+
 export interface Column {
   _id: string
   title: string
-  cards: any[]
+  cards: Card[]
   cardOrderIds: string[]
   boardId: string
 }
