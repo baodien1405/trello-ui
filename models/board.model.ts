@@ -1,4 +1,4 @@
-import { Column } from '@/models'
+import { Column, User } from '@/models'
 import { UniqueIdentifier } from '@dnd-kit/core'
 
 export interface Board {
@@ -9,6 +9,8 @@ export interface Board {
   type: string
   columnOrderIds: string[]
   columns: Column[]
+  owners: User[]
+  members: User[]
   createdAt: number
   updatedAt: any
   _destroy: boolean

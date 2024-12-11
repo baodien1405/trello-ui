@@ -13,7 +13,7 @@ interface BoardUserGroupProps {
   limit?: number
 }
 
-export function BoardUserGroup({ boardUsers = [], limit = 8 }: BoardUserGroupProps) {
+export function BoardUserGroup({ boardUsers = [], limit = 4 }: BoardUserGroupProps) {
   const [anchorPopoverElement, setAnchorPopoverElement] = useState<HTMLDivElement | null>(null)
   const isOpenPopover = Boolean(anchorPopoverElement)
   const popoverId = isOpenPopover ? 'board-all-users-popover' : undefined
@@ -28,21 +28,21 @@ export function BoardUserGroup({ boardUsers = [], limit = 8 }: BoardUserGroupPro
 
   return (
     <Box sx={{ display: 'flex', gap: '4px' }}>
-      {[...Array(16)].map((_, index) => {
+      {boardUsers.map((user, index) => {
         if (index < limit) {
           return (
-            <Tooltip title="trungquandev" key={index}>
+            <Tooltip title={user.displayName} key={user._id}>
               <Avatar
                 sx={{ width: 34, height: 34, cursor: 'pointer' }}
-                alt="trungquandev"
-                src="https://graph.facebook.com/1325702547590327/picture?width=400&height=400"
+                alt={user.displayName}
+                src={user.avatar}
               />
             </Tooltip>
           )
         }
       })}
 
-      {[...Array(16)].length > limit && (
+      {boardUsers.length > limit && (
         <Tooltip title="Show more">
           <Box
             aria-describedby={popoverId}
@@ -61,7 +61,7 @@ export function BoardUserGroup({ boardUsers = [], limit = 8 }: BoardUserGroupPro
               backgroundColor: '#a4b0be'
             }}
           >
-            +{[...Array(16)].length - limit}
+            +{boardUsers.length - limit}
           </Box>
         </Tooltip>
       )}
@@ -74,12 +74,12 @@ export function BoardUserGroup({ boardUsers = [], limit = 8 }: BoardUserGroupPro
         anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
       >
         <Box sx={{ p: 2, maxWidth: '235px', display: 'flex', flexWrap: 'wrap', gap: 1 }}>
-          {[...Array(16)].map((_, index) => (
-            <Tooltip title="trungquandev" key={index}>
+          {boardUsers.map((user) => (
+            <Tooltip title={user.displayName} key={user._id}>
               <Avatar
                 sx={{ width: 34, height: 34, cursor: 'pointer' }}
-                alt="trungquandev"
-                src="https://graph.facebook.com/1325702547590327/picture?width=400&height=400"
+                alt={user.displayName}
+                src={user.avatar}
               />
             </Tooltip>
           ))}

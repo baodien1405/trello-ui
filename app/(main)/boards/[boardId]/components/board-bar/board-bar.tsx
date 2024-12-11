@@ -77,7 +77,7 @@ export function BoardBar({ board }: BoardBarProps) {
           Invite
         </Button>
 
-        <BoardUserGroup />
+        <BoardUserGroup boardUsers={[...board.owners, ...board.members]} />
       </Stack>
     </Box>
   )
