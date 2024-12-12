@@ -36,6 +36,7 @@ import { CardUserGroup } from '@/app/(main)/boards/[boardId]/components/active-c
 import { CardDescriptionMdEditor } from '@/app/(main)/boards/[boardId]/components/active-card-modal/card-description-md-editor'
 import { CardActivitySection } from '@/app/(main)/boards/[boardId]/components/active-card-modal/card-activity-section'
 import { useAppStore, useUpdateCardMutation } from '@/hooks'
+import { Comment } from '@/models'
 
 const SidebarItem = styled(Box)<{ component?: string }>(({ theme }) => ({
   display: 'flex',
@@ -104,6 +105,17 @@ export function ActiveCardModal() {
     const response = await updateCardMutation.mutateAsync(formData)
     setActiveCard(response.metadata)
     event.target.value = ''
+  }
+
+  const handleAddCardComment = async (commentToAdd: Comment) => {
+    if (updateCardMutation.isPending) return
+
+    const response = await updateCardMutation.mutateAsync({
+      cardId: activeCard._id,
+      commentToAdd: commentToAdd
+    })
+
+    setActiveCard(response.metadata)
   }
 
   return (
@@ -203,8 +215,10 @@ export function ActiveCardModal() {
                 </Typography>
               </Box>
 
-              {/* Feature 04: Xử lý các hành động, ví dụ comment vào Card */}
-              <CardActivitySection />
+              <CardActivitySection
+                cardComments={activeCard.comments}
+                onAddCardComment={handleAddCardComment}
+              />
             </Box>
           </Grid>
 

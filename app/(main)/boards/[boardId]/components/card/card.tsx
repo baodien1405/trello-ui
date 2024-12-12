@@ -79,7 +79,7 @@ export function Card({ card }: CardProps) {
             </Button>
           )}
 
-          {!!card?.attachments.length && (
+          {!!card?.attachments?.length && (
             <Button size="small" startIcon={<AttachmentIcon />}>
               {card?.attachments.length}
             </Button>
