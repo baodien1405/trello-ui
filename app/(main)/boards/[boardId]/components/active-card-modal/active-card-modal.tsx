@@ -36,7 +36,6 @@ import { CardUserGroup } from '@/app/(main)/boards/[boardId]/components/active-c
 import { CardDescriptionMdEditor } from '@/app/(main)/boards/[boardId]/components/active-card-modal/card-description-md-editor'
 import { CardActivitySection } from '@/app/(main)/boards/[boardId]/components/active-card-modal/card-activity-section'
 import { useAppStore, useUpdateCardMutation } from '@/hooks'
-import { Card } from '@/models'
 
 const SidebarItem = styled(Box)<{ component?: string }>(({ theme }) => ({
   display: 'flex',
@@ -58,13 +57,11 @@ const SidebarItem = styled(Box)<{ component?: string }>(({ theme }) => ({
   }
 }))
 
-interface ActiveCardModalProps {
-  activeCard: Card
-}
-
-export function ActiveCardModal({ activeCard }: ActiveCardModalProps) {
-  const setActiveCard = useAppStore((state) => state.setActiveCard)
+export function ActiveCardModal() {
+  const { activeCard, setActiveCard } = useAppStore()
   const updateCardMutation = useUpdateCardMutation()
+
+  if (!activeCard) return null
 
   const handleCloseModal = () => {
     setActiveCard(null)

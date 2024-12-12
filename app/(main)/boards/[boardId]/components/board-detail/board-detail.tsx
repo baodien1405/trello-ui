@@ -34,17 +34,16 @@ export function BoardDetail({ boardId }: BoardDetailProps) {
         column.cards = mapOrder(column.cards, column.cardOrderIds, '_id')
       }
 
-      if (column._id === activeCard?.columnId) {
-        const card = column.cards.find((card) => card._id === activeCard._id)
-        if (card && activeCard) {
-          Object.keys(activeCard).forEach((key) => {
-            const updateKey = key as keyof Card
-            if (activeCard[updateKey] !== undefined && activeCard[updateKey] !== null) {
-              card[updateKey] = activeCard[updateKey]
-            }
-          })
+      if (column._id !== activeCard?.columnId) return
+
+      const card = column.cards.find((card) => card._id === activeCard._id)
+      if (!card || !activeCard) return
+
+      Object.entries(activeCard).forEach(([key, value]) => {
+        if (value !== undefined && value !== null) {
+          card[key as keyof Card] = value
         }
-      }
+      })
     })
   }, [board, activeCard])
 
@@ -54,7 +53,7 @@ export function BoardDetail({ boardId }: BoardDetailProps) {
 
   return (
     <Container disableGutters maxWidth={false} sx={{ height: '100vh' }}>
-      {activeCard && <ActiveCardModal activeCard={activeCard} />}
+      <ActiveCardModal />
       <AppBar />
       <BoardBar board={board} />
       <BoardContent board={board} />
