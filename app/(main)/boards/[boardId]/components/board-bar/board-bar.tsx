@@ -1,21 +1,18 @@
-import Chip from '@mui/material/Chip'
 import Box from '@mui/material/Box'
+import Chip from '@mui/material/Chip'
 import Stack from '@mui/material/Stack'
-import AvatarGroup from '@mui/material/AvatarGroup'
-import Avatar from '@mui/material/Avatar'
 import Tooltip from '@mui/material/Tooltip'
-import Button from '@mui/material/Button'
 
-import DashboardIcon from '@mui/icons-material/Dashboard'
-import VpnLockIcon from '@mui/icons-material/VpnLock'
 import AddToDriveIcon from '@mui/icons-material/AddToDrive'
 import BoltIcon from '@mui/icons-material/Bolt'
+import DashboardIcon from '@mui/icons-material/Dashboard'
 import FilterListIcon from '@mui/icons-material/FilterList'
-import PersonAddIcon from '@mui/icons-material/PersonAdd'
+import VpnLockIcon from '@mui/icons-material/VpnLock'
 
-import { convertTitleCase } from '@/utils'
-import { Board } from '@/models'
+import { InviteBoardUser } from '@/app/(main)/boards/[boardId]/components/board-bar/invite-board-user'
 import { BoardUserGroup } from '@/app/(main)/boards/components'
+import { Board } from '@/models'
+import { convertTitleCase } from '@/utils'
 
 const MENU_STYLES = {
   color: 'white',
@@ -69,13 +66,7 @@ export function BoardBar({ board }: BoardBarProps) {
       </Stack>
 
       <Stack direction="row" alignItems="center" gap={2}>
-        <Button
-          variant="outlined"
-          startIcon={<PersonAddIcon />}
-          sx={{ color: 'white', borderColor: 'white', '&:hover': { borderColor: 'white' } }}
-        >
-          Invite
-        </Button>
+        <InviteBoardUser />
 
         <BoardUserGroup boardUsers={[...board.owners, ...board.members]} />
       </Stack>
