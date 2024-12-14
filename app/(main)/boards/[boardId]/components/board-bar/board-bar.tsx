@@ -66,7 +66,7 @@ export function BoardBar({ board }: BoardBarProps) {
       </Stack>
 
       <Stack direction="row" alignItems="center" gap={2}>
-        <InviteBoardUser />
+        <InviteBoardUser boardId={board._id} />
 
         <BoardUserGroup boardUsers={[...board.owners, ...board.members]} />
       </Stack>

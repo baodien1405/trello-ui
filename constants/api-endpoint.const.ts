@@ -8,6 +8,7 @@ export const ApiEndpoint = {
   BOARD_GET_DETAIL: '/v1/api/boards/{boardId}',
   BOARD_UPDATE: '/v1/api/boards/{boardId}',
   BOARD_MOVE_CARD_TO_DIFFERENT_COLUMN: '/v1/api/boards/supports/moving_card',
+  INVITATION_INVITE_USER_TO_BOARD: '/v1/api/invitations/board',
   COLUMN_ADD: '/v1/api/columns',
   COLUMN_UPDATE: '/v1/api/columns/{columnId}',
   COLUMN_DELETE: '/v1/api/columns/{columnId}',

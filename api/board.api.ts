@@ -1,12 +1,12 @@
 import { ApiEndpoint } from '@/constants'
-import axiosClient from './axios-client'
 import {
   Board,
-  SuccessResponse,
-  MoveCardDiffColumnPayload,
   ListParams,
-  ListResponse
+  ListResponse,
+  MoveCardDiffColumnPayload,
+  SuccessResponse
 } from '@/models'
+import axiosClient from './axios-client'
 
 export const boardApi = {
   getAll(params: Partial<ListParams>): Promise<SuccessResponse<ListResponse<Board>>> {

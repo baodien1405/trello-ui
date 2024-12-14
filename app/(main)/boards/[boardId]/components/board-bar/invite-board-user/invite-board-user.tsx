@@ -14,8 +14,15 @@ import PersonAddIcon from '@mui/icons-material/PersonAdd'
 import TextField from '@mui/material/TextField'
 
 import FieldErrorAlert from '@/components/field-error-alert'
+import { useInviteUserToBoard } from '@/hooks'
+import { toast } from 'react-toastify'
 
-export function InviteBoardUser() {
+interface InviteBoardUserProps {
+  boardId: string
+}
+
+export function InviteBoardUser({ boardId }: InviteBoardUserProps) {
+  const inviteUserToBoardMutation = useInviteUserToBoard()
   const [anchorPopoverElement, setAnchorPopoverElement] = useState(null)
   const isOpenPopover = Boolean(anchorPopoverElement)
   const popoverId = isOpenPopover ? 'invite-board-user-popover' : undefined
@@ -25,7 +32,7 @@ export function InviteBoardUser() {
     handleSubmit,
     setValue,
     formState: { errors }
-  } = useForm({
+  } = useForm<{ inviteeEmail: string | null }>({
     resolver: yupResolver(
       yup.object().shape({
         inviteeEmail: yup
@@ -44,13 +51,18 @@ export function InviteBoardUser() {
     else setAnchorPopoverElement(null)
   }
 
-  const handleSubmitInviteUserToBoard = (data: any) => {
-    const { inviteeEmail } = data
-    console.log('inviteeEmail:', inviteeEmail)
+  const handleInviteUserToBoard = async ({ inviteeEmail }: { inviteeEmail: string | null }) => {
+    if (!inviteeEmail || inviteUserToBoardMutation.isPending) return
 
-    // Clear thẻ input sử dụng react-hook-form bằng setValue
+    await inviteUserToBoardMutation.mutateAsync({
+      inviteeEmail,
+      boardId: boardId
+    })
+
     setValue('inviteeEmail', null)
     setAnchorPopoverElement(null)
+
+    toast.success('User invited to board successfully!')
   }
 
   return (
@@ -76,7 +88,7 @@ export function InviteBoardUser() {
         anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
         transformOrigin={{ vertical: 'top', horizontal: 'right' }}
       >
-        <form onSubmit={handleSubmit(handleSubmitInviteUserToBoard)} style={{ width: '320px' }}>
+        <form onSubmit={handleSubmit(handleInviteUserToBoard)} style={{ width: '320px' }}>
           <Box sx={{ p: '15px 20px 20px 20px', display: 'flex', flexDirection: 'column', gap: 2 }}>
             <Typography
               component="span"
