@@ -1,27 +1,26 @@
 'use client'
 
-import Link from 'next/link'
-import { useState } from 'react'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
-import SvgIcon from '@mui/material/SvgIcon'
-import Badge from '@mui/material/Badge'
+import InputAdornment from '@mui/material/InputAdornment'
 import Stack from '@mui/material/Stack'
+import SvgIcon from '@mui/material/SvgIcon'
 import TextField from '@mui/material/TextField'
 import Tooltip from '@mui/material/Tooltip'
 import Typography from '@mui/material/Typography'
-import InputAdornment from '@mui/material/InputAdornment'
+import Link from 'next/link'
+import { useState } from 'react'
 
 import AppsIcon from '@mui/icons-material/Apps'
+import CloseIcon from '@mui/icons-material/Close'
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline'
-import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone'
 import LibraryAddIcon from '@mui/icons-material/LibraryAdd'
 import SearchIcon from '@mui/icons-material/Search'
-import CloseIcon from '@mui/icons-material/Close'
 
-import { RoutePath } from '@/constants'
-import ModeSelect from '@/components/mode-select'
 import { TrelloIcon } from '@/assets'
+import { Notifications } from '@/components/app-bar/notifications'
+import ModeSelect from '@/components/mode-select'
+import { RoutePath } from '@/constants'
 import { Profiles, Recent, Starred, Templates, Workspaces } from './menu-list'
 
 export default function AppBar() {
@@ -115,11 +114,7 @@ export default function AppBar() {
 
         <ModeSelect />
 
-        <Tooltip title="Notification">
-          <Badge color="warning" variant="dot" sx={{ cursor: 'pointer' }}>
-            <NotificationsNoneIcon sx={{ color: 'white' }} />
-          </Badge>
-        </Tooltip>
+        <Notifications />
 
         <Tooltip title="Help">
           <HelpOutlineIcon sx={{ cursor: 'pointer', color: 'white' }} />
