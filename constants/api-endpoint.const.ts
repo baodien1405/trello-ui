@@ -14,5 +14,6 @@ export const ApiEndpoint = {
   COLUMN_DELETE: '/v1/api/columns/{columnId}',
   CARD_ADD: '/v1/api/cards',
   CARD_UPDATE: '/v1/api/cards/{cardId}',
-  USER_UPDATE: '/v1/api/users'
+  USER_UPDATE: '/v1/api/users',
+  INVITATION_GET_LIST: '/v1/api/invitations'
 }
