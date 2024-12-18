@@ -18,5 +18,18 @@ export const invitationApi = {
     payload: InviteUserToBoardPayload
   ): Promise<SuccessResponse<Invitation & { board: Board; inviter: User; invitee: User }>> {
     return axiosClient.post(ApiEndpoint.INVITATION_INVITE_USER_TO_BOARD, payload)
+  },
+
+  updateBoardInvitation({
+    notificationId,
+    status
+  }: {
+    notificationId: string
+    status: string
+  }): Promise<SuccessResponse<Invitation>> {
+    return axiosClient.put(
+      ApiEndpoint.INVITATION_BOARD_UPDATE.replace('{notificationId}', notificationId),
+      { status }
+    )
   }
 }
