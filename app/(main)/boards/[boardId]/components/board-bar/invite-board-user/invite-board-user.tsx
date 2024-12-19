@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useForm } from 'react-hook-form'
 import * as yup from 'yup'
+import { toast } from 'react-toastify'
 
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
@@ -11,11 +12,11 @@ import Tooltip from '@mui/material/Tooltip'
 import Popover from '@mui/material/Popover'
 import Button from '@mui/material/Button'
 import PersonAddIcon from '@mui/icons-material/PersonAdd'
+import CircularProgressIcon from '@mui/material/CircularProgress'
 import TextField from '@mui/material/TextField'
 
 import FieldErrorAlert from '@/components/field-error-alert'
 import { useInviteUserToBoard } from '@/hooks'
-import { toast } from 'react-toastify'
 
 interface InviteBoardUserProps {
   boardId: string
@@ -116,6 +117,12 @@ export function InviteBoardUser({ boardId }: InviteBoardUserProps) {
                 type="submit"
                 variant="contained"
                 color="info"
+                disabled={inviteUserToBoardMutation.isPending}
+                startIcon={
+                  inviteUserToBoardMutation.isPending ? (
+                    <CircularProgressIcon color="inherit" size="1em" />
+                  ) : null
+                }
               >
                 Invite
               </Button>
