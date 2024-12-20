@@ -18,13 +18,14 @@ import DoneIcon from '@mui/icons-material/Done'
 import NotInterestedIcon from '@mui/icons-material/NotInterested'
 import CircularProgressIcon from '@mui/material/CircularProgress'
 
-import { useInvitationListQuery } from '@/hooks'
+import { useInvitationListQuery, useUpdateBoardInvitation } from '@/hooks'
 import { BOARD_INVITATION_STATUS } from '@/constants'
 
 export function Notifications() {
   const [anchorEl, setAnchorEl] = useState(null)
   const open = Boolean(anchorEl)
 
+  const updateBoardInvitation = useUpdateBoardInvitation()
   const { data: invitationListData, isLoading: isLoadingInvitationList } = useInvitationListQuery()
   const invitationList = invitationListData?.metadata?.results || []
 
@@ -35,9 +36,11 @@ export function Notifications() {
     setAnchorEl(null)
   }
 
-  const updateBoardInvitation = (status: string, notificationId: string) => {
-    console.log('🚀 ~ updateBoardInvitation ~ notificationId:', notificationId)
-    console.log('status: ', status)
+  const handleUpdateBoardInvitation = (status: string, notificationId: string) => {
+    updateBoardInvitation.mutateAsync({
+      notificationId,
+      status
+    })
   }
 
   return (
@@ -116,25 +119,29 @@ export function Notifications() {
                       }}
                     >
                       <Button
-                        className="interceptor-loading"
                         type="submit"
                         variant="contained"
                         color="success"
                         size="small"
                         onClick={() =>
-                          updateBoardInvitation(BOARD_INVITATION_STATUS.ACCEPTED, invitation._id)
+                          handleUpdateBoardInvitation(
+                            BOARD_INVITATION_STATUS.ACCEPTED,
+                            invitation._id
+                          )
                         }
                       >
                         Accept
                       </Button>
                       <Button
-                        className="interceptor-loading"
                         type="submit"
                         variant="contained"
                         color="secondary"
                         size="small"
                         onClick={() =>
-                          updateBoardInvitation(BOARD_INVITATION_STATUS.REJECTED, invitation._id)
+                          handleUpdateBoardInvitation(
+                            BOARD_INVITATION_STATUS.REJECTED,
+                            invitation._id
+                          )
                         }
                       >
                         Reject
