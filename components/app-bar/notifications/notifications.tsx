@@ -36,9 +36,9 @@ export function Notifications() {
     setAnchorEl(null)
   }
 
-  const handleUpdateBoardInvitation = (status: string, notificationId: string) => {
+  const handleUpdateBoardInvitation = (status: string, invitationId: string) => {
     updateBoardInvitation.mutateAsync({
-      notificationId,
+      invitationId,
       status
     })
   }

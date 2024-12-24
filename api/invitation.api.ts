@@ -21,14 +21,14 @@ export const invitationApi = {
   },
 
   updateBoardInvitation({
-    notificationId,
+    invitationId,
     status
   }: {
-    notificationId: string
+    invitationId: string
     status: string
   }): Promise<SuccessResponse<Invitation>> {
     return axiosClient.put(
-      ApiEndpoint.INVITATION_BOARD_UPDATE.replace('{notificationId}', notificationId),
+      ApiEndpoint.INVITATION_BOARD_UPDATE.replace('{invitationId}', invitationId),
       { status }
     )
   }

@@ -16,5 +16,5 @@ export const ApiEndpoint = {
   CARD_UPDATE: '/v1/api/cards/{cardId}',
   USER_UPDATE: '/v1/api/users',
   INVITATION_GET_LIST: '/v1/api/invitations',
-  INVITATION_BOARD_UPDATE: '/v1/api/invitations/board/{notificationId}'
+  INVITATION_BOARD_UPDATE: '/v1/api/invitations/board/{invitationId}'
 }
