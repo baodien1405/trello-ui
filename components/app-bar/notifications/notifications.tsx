@@ -1,6 +1,7 @@
 'use client'
 
-import { useState } from 'react'
+import { useRouter } from 'next/navigation'
+import { useEffect, useMemo, useState } from 'react'
 import moment from 'moment'
 
 import Badge from '@mui/material/Badge'
@@ -18,29 +19,59 @@ import DoneIcon from '@mui/icons-material/Done'
 import NotInterestedIcon from '@mui/icons-material/NotInterested'
 import CircularProgressIcon from '@mui/material/CircularProgress'
 
-import { useInvitationListQuery, useUpdateBoardInvitation } from '@/hooks'
-import { BOARD_INVITATION_STATUS } from '@/constants'
+import { useAppStore, useInvitationListQuery, useUpdateBoardInvitation } from '@/hooks'
+import { BOARD_INVITATION_STATUS, RoutePath } from '@/constants'
+import { socketIoInstance } from '@/utils'
+import { Invitation } from '@/models'
 
 export function Notifications() {
+  const router = useRouter()
+  const [hasNewInvitation, setHasNewInvitation] = useState(false)
   const [anchorEl, setAnchorEl] = useState(null)
   const open = Boolean(anchorEl)
-
+  const currentUser = useAppStore((state) => state.currentUser)
   const updateBoardInvitation = useUpdateBoardInvitation()
   const { data: invitationListData, isLoading: isLoadingInvitationList } = useInvitationListQuery()
-  const invitationList = invitationListData?.metadata?.results || []
+  const invitationList = useMemo(
+    () => invitationListData?.metadata?.results || [],
+    [invitationListData?.metadata?.results]
+  )
+
+  useEffect(() => {
+    const onReceiveNewInvitation = (invitation: Invitation) => {
+      if (invitation.inviteeId === currentUser?._id) {
+        invitationList.unshift(invitation)
+
+        setHasNewInvitation(true)
+      }
+    }
+
+    socketIoInstance.on('BE_USER_INVITED_TO_BOARD', onReceiveNewInvitation)
+
+    return () => {
+      socketIoInstance.off('BE_USER_INVITED_TO_BOARD', onReceiveNewInvitation)
+    }
+  }, [currentUser?._id, invitationList])
 
   const handleClickNotificationIcon = (event: any) => {
     setAnchorEl(event.currentTarget)
+    setHasNewInvitation(false)
   }
   const handleClose = () => {
     setAnchorEl(null)
   }
 
-  const handleUpdateBoardInvitation = (status: string, invitationId: string) => {
-    updateBoardInvitation.mutateAsync({
+  const handleUpdateBoardInvitation = async (status: string, invitationId: string) => {
+    if (updateBoardInvitation.isPending) return
+
+    const response = await updateBoardInvitation.mutateAsync({
       invitationId,
       status
     })
+
+    if (response.metadata.boardInvitation.status === BOARD_INVITATION_STATUS.ACCEPTED) {
+      router.push(`${RoutePath.BOARDS}/${response.metadata.boardInvitation.boardId}`)
+    }
   }
 
   return (
@@ -48,8 +79,9 @@ export function Notifications() {
       <Tooltip title="Notifications">
         <Badge
           color="warning"
-          // variant="none"
+          badgeContent=""
           variant="dot"
+          invisible={!hasNewInvitation}
           sx={{ cursor: 'pointer' }}
           id="basic-button-open-notification"
           aria-controls={open ? 'basic-notification-drop-down' : undefined}
@@ -59,8 +91,8 @@ export function Notifications() {
         >
           <NotificationsNoneIcon
             sx={{
-              color: 'white'
-              // color: 'yellow'
+              color: hasNewInvitation ? 'yellow' : 'white',
+              cursor: 'pointer'
             }}
           />
         </Badge>

@@ -14,9 +14,7 @@ export const invitationApi = {
     return axiosClient.get(ApiEndpoint.INVITATION_GET_LIST)
   },
 
-  inviteUserToBoard(
-    payload: InviteUserToBoardPayload
-  ): Promise<SuccessResponse<Invitation & { board: Board; inviter: User; invitee: User }>> {
+  inviteUserToBoard(payload: InviteUserToBoardPayload): Promise<SuccessResponse<Invitation>> {
     return axiosClient.post(ApiEndpoint.INVITATION_INVITE_USER_TO_BOARD, payload)
   },
 

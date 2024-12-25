@@ -17,6 +17,7 @@ import TextField from '@mui/material/TextField'
 
 import FieldErrorAlert from '@/components/field-error-alert'
 import { useInviteUserToBoard } from '@/hooks'
+import { socketIoInstance } from '@/utils'
 
 interface InviteBoardUserProps {
   boardId: string
@@ -55,10 +56,12 @@ export function InviteBoardUser({ boardId }: InviteBoardUserProps) {
   const handleInviteUserToBoard = async ({ inviteeEmail }: { inviteeEmail: string | null }) => {
     if (!inviteeEmail || inviteUserToBoardMutation.isPending) return
 
-    await inviteUserToBoardMutation.mutateAsync({
+    const response = await inviteUserToBoardMutation.mutateAsync({
       inviteeEmail,
       boardId: boardId
     })
+
+    socketIoInstance.emit('FE_USER_INVITED_TO_BOARD', response.metadata)
 
     setValue('inviteeEmail', null)
     setAnchorPopoverElement(null)
