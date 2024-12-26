@@ -53,7 +53,7 @@ export function BoardDetail({ boardId }: BoardDetailProps) {
 
   return (
     <Container disableGutters maxWidth={false} sx={{ height: '100vh' }}>
-      <ActiveCardModal />
+      <ActiveCardModal board={board} />
       <AppBar />
       <BoardBar board={board} />
       <BoardContent board={board} />

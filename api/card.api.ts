@@ -1,4 +1,4 @@
-import { ApiEndpoint } from '@/constants'
+import { ApiEndpoint, CARD_MEMBER_ACTIONS } from '@/constants'
 import axiosClient from './axios-client'
 import { SuccessResponse, CardPayload, Card, Comment } from '@/models'
 
@@ -8,7 +8,13 @@ export const cardApi = {
   },
 
   update(
-    payload: (Partial<Card> & { cardId: string; commentToAdd?: Comment }) | FormData
+    payload:
+      | (Partial<Card> & {
+          cardId: string
+          commentToAdd?: Comment
+          incomingMemberInfo?: { userId: string; action: string }
+        })
+      | FormData
   ): Promise<SuccessResponse<Card>> {
     const isFormData = payload instanceof FormData
     const cardId = isFormData ? payload.get('cardId') : payload.cardId

@@ -36,7 +36,8 @@ import { CardUserGroup } from '@/app/(main)/boards/[boardId]/components/active-c
 import { CardDescriptionMdEditor } from '@/app/(main)/boards/[boardId]/components/active-card-modal/card-description-md-editor'
 import { CardActivitySection } from '@/app/(main)/boards/[boardId]/components/active-card-modal/card-activity-section'
 import { useAppStore, useUpdateCardMutation } from '@/hooks'
-import { Comment } from '@/models'
+import { Board, Comment, User } from '@/models'
+import { CARD_MEMBER_ACTIONS } from '@/constants'
 
 const SidebarItem = styled(Box)<{ component?: string }>(({ theme }) => ({
   display: 'flex',
@@ -58,7 +59,11 @@ const SidebarItem = styled(Box)<{ component?: string }>(({ theme }) => ({
   }
 }))
 
-export function ActiveCardModal() {
+interface ActiveCardModalProps {
+  board: Board
+}
+
+export function ActiveCardModal({ board }: ActiveCardModalProps) {
   const { activeCard, setActiveCard } = useAppStore()
   const updateCardMutation = useUpdateCardMutation()
 
@@ -116,6 +121,19 @@ export function ActiveCardModal() {
     })
 
     setActiveCard(response.metadata)
+  }
+
+  const handleUpdateCardMembers = async (user: User) => {
+    if (updateCardMutation.isPending) return
+
+    const incomingMemberInfo = {
+      userId: user._id,
+      action: activeCard.memberIds?.includes(user._id)
+        ? CARD_MEMBER_ACTIONS.REMOVE
+        : CARD_MEMBER_ACTIONS.ADD
+    }
+
+    await updateCardMutation.mutateAsync({ cardId: activeCard._id, incomingMemberInfo })
   }
 
   return (
@@ -180,8 +198,11 @@ export function ActiveCardModal() {
                 Members
               </Typography>
 
-              {/* Feature 02: Xử lý các thành viên của Card */}
-              <CardUserGroup />
+              <CardUserGroup
+                board={board}
+                cardMemberIds={activeCard.memberIds}
+                onUpdateCardMembers={handleUpdateCardMembers}
+              />
             </Box>
 
             <Box sx={{ mb: 3 }}>

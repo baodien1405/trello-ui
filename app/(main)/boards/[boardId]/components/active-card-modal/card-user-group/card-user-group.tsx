@@ -8,11 +8,23 @@ import Popover from '@mui/material/Popover'
 import AddIcon from '@mui/icons-material/Add'
 import Badge from '@mui/material/Badge'
 import CheckCircleIcon from '@mui/icons-material/CheckCircle'
+import { Board, User } from '@/models'
 
-export function CardUserGroup({ cardMemberIds = [] }) {
+interface CardUserGroupProps {
+  board: Board
+  cardMemberIds?: string[]
+  onUpdateCardMembers?: (user: User) => void
+}
+
+export function CardUserGroup({
+  board,
+  cardMemberIds = [],
+  onUpdateCardMembers = () => {}
+}: CardUserGroupProps) {
   const [anchorPopoverElement, setAnchorPopoverElement] = useState(null)
   const isOpenPopover = Boolean(anchorPopoverElement)
   const popoverId = isOpenPopover ? 'card-all-users-popover' : undefined
+  const cardMemberList = board.members.filter((member) => cardMemberIds.includes(member._id)) || []
 
   const handleTogglePopover = (event: any) => {
     if (!anchorPopoverElement) setAnchorPopoverElement(event.currentTarget)
@@ -21,12 +33,12 @@ export function CardUserGroup({ cardMemberIds = [] }) {
 
   return (
     <Box sx={{ display: 'flex', gap: '4px', flexWrap: 'wrap' }}>
-      {[...Array(8)].map((_, index) => (
-        <Tooltip title="trungquandev" key={index}>
+      {cardMemberList.map((member) => (
+        <Tooltip title={member.displayName} key={member._id}>
           <Avatar
             sx={{ width: 34, height: 34, cursor: 'pointer' }}
-            alt="trungquandev"
-            src="https://trungquandev.com/wp-content/uploads/2019/06/trungquandev-cat-avatar.png"
+            alt={member.displayName}
+            src={member.avatar}
           />
         </Tooltip>
       ))}
@@ -66,18 +78,23 @@ export function CardUserGroup({ cardMemberIds = [] }) {
         anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
       >
         <Box sx={{ p: 2, maxWidth: '260px', display: 'flex', flexWrap: 'wrap', gap: 1.5 }}>
-          {[...Array(16)].map((_, index) => (
-            <Tooltip title="trungquandev" key={index}>
+          {board.members.map((member) => (
+            <Tooltip title={member.displayName} key={member._id}>
               <Badge
                 sx={{ cursor: 'pointer' }}
                 overlap="rectangular"
                 anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-                badgeContent={<CheckCircleIcon fontSize="small" sx={{ color: '#27ae60' }} />}
+                badgeContent={
+                  cardMemberIds.includes(member._id) ? (
+                    <CheckCircleIcon fontSize="small" sx={{ color: '#27ae60' }} />
+                  ) : null
+                }
+                onClick={() => onUpdateCardMembers(member)}
               >
                 <Avatar
                   sx={{ width: 34, height: 34 }}
-                  alt="trungquandev"
-                  src="https://trungquandev.com/wp-content/uploads/2019/06/trungquandev-cat-avatar.png"
+                  alt={member.displayName}
+                  src={member.avatar}
                 />
               </Badge>
             </Tooltip>

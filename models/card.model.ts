@@ -13,6 +13,7 @@ export interface Card {
   columnId: string
   title: string
   description?: string
+  memberIds?: string[]
   cover: string | null
   comments?: Comment[]
 }
