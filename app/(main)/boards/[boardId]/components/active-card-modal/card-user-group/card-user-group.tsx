@@ -9,11 +9,12 @@ import AddIcon from '@mui/icons-material/Add'
 import Badge from '@mui/material/Badge'
 import CheckCircleIcon from '@mui/icons-material/CheckCircle'
 import { Board, User } from '@/models'
+import { CARD_MEMBER_ACTIONS } from '@/constants'
 
 interface CardUserGroupProps {
   board: Board
   cardMemberIds?: string[]
-  onUpdateCardMembers?: (user: User) => void
+  onUpdateCardMembers?: (incomingMemberInfo: { userId: string; action: string }) => void
 }
 
 export function CardUserGroup({
@@ -29,6 +30,17 @@ export function CardUserGroup({
   const handleTogglePopover = (event: any) => {
     if (!anchorPopoverElement) setAnchorPopoverElement(event.currentTarget)
     else setAnchorPopoverElement(null)
+  }
+
+  const handleCardMembersUpdate = (user: User) => {
+    const incomingMemberInfo = {
+      userId: user._id,
+      action: cardMemberIds.includes(user._id)
+        ? CARD_MEMBER_ACTIONS.REMOVE
+        : CARD_MEMBER_ACTIONS.ADD
+    }
+
+    onUpdateCardMembers(incomingMemberInfo)
   }
 
   return (
@@ -89,7 +101,7 @@ export function CardUserGroup({
                     <CheckCircleIcon fontSize="small" sx={{ color: '#27ae60' }} />
                   ) : null
                 }
-                onClick={() => onUpdateCardMembers(member)}
+                onClick={() => handleCardMembersUpdate(member)}
               >
                 <Avatar
                   sx={{ width: 34, height: 34 }}
