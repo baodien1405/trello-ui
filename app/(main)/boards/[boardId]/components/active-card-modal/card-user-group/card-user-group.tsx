@@ -24,7 +24,7 @@ export function CardUserGroup({
   const [anchorPopoverElement, setAnchorPopoverElement] = useState(null)
   const isOpenPopover = Boolean(anchorPopoverElement)
   const popoverId = isOpenPopover ? 'card-all-users-popover' : undefined
-  const cardMemberList = board.members.filter((member) => cardMemberIds.includes(member._id)) || []
+  const cardMemberList = board.members?.filter((member) => cardMemberIds.includes(member._id)) || []
 
   const handleTogglePopover = (event: any) => {
     if (!anchorPopoverElement) setAnchorPopoverElement(event.currentTarget)

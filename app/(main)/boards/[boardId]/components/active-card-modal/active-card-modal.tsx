@@ -133,7 +133,12 @@ export function ActiveCardModal({ board }: ActiveCardModalProps) {
         : CARD_MEMBER_ACTIONS.ADD
     }
 
-    await updateCardMutation.mutateAsync({ cardId: activeCard._id, incomingMemberInfo })
+    const response = await updateCardMutation.mutateAsync({
+      cardId: activeCard._id,
+      incomingMemberInfo
+    })
+
+    setActiveCard(response.metadata)
   }
 
   return (
