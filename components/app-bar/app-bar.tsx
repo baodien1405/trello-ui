@@ -22,6 +22,7 @@ import { Notifications } from '@/components/app-bar/notifications'
 import ModeSelect from '@/components/mode-select'
 import { RoutePath } from '@/constants'
 import { Profiles, Recent, Starred, Templates, Workspaces } from './menu-list'
+import { SearchBoard } from '@/components/app-bar/search-board'
 
 export default function AppBar() {
   const [searchValue, setSearchValue] = useState('')
@@ -73,7 +74,7 @@ export default function AppBar() {
       </Stack>
 
       <Stack direction="row" alignItems="center" gap={2}>
-        <TextField
+        {/* <TextField
           id="outlined-search"
           label="Search"
           type="text"
@@ -110,7 +111,9 @@ export default function AppBar() {
               )
             }
           }}
-        />
+        /> */}
+
+        <SearchBoard />
 
         <ModeSelect />
 

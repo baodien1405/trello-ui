@@ -10,7 +10,7 @@ type UseBoardListQueryOptions = Omit<
 >
 
 export const useBoardListQuery = (
-  params: Partial<ListParams>,
+  params: Partial<ListParams & { 'q[title]'?: string }>,
   options?: UseBoardListQueryOptions
 ) => {
   return useQuery({
