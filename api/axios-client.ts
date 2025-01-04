@@ -1,6 +1,17 @@
 import axios, { AxiosError, HttpStatusCode } from 'axios'
 import { toast } from 'react-toastify'
 
+import { ApiEndpoint } from '@/constants'
+import { AuthResponse } from '@/models'
+import {
+  removeAccessTokenToLS,
+  removeRefreshTokenToLS,
+  removeUserToLS,
+  setAccessTokenToLS,
+  setRefreshTokenToLS,
+  setUserToLS
+} from '@/utils'
+
 const axiosClient = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_ENDPOINT,
   headers: {
@@ -10,17 +21,22 @@ const axiosClient = axios.create({
   withCredentials: true
 })
 
-// Add a response interceptor
 axiosClient.interceptors.response.use(
   function (response) {
-    // Any status code that lie within the range of 2xx cause this function to trigger
-    // Do something with response data
+    const { url } = response.config
+    if (url && [ApiEndpoint.AUTH_LOGIN].includes(url)) {
+      const { accessToken, refreshToken, user } = response.data.metadata as AuthResponse
+      setAccessTokenToLS(accessToken)
+      setRefreshTokenToLS(refreshToken)
+      setUserToLS(user)
+    } else if (url === ApiEndpoint.AUTH_LOGOUT) {
+      removeAccessTokenToLS()
+      removeRefreshTokenToLS()
+      removeUserToLS()
+    }
     return response.data
   },
   function (error: AxiosError) {
-    // Any status codes that falls outside the range of 2xx cause this function to trigger
-    // Do something with response error
-
     let errorMessage = error?.message
 
     if ((error?.response?.data as any)?.message) {

@@ -1,20 +1,19 @@
 'use client'
 
-import TextField from '@mui/material/TextField'
+import { yupResolver } from '@hookform/resolvers/yup'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import CardActions from '@mui/material/CardActions'
 import CircularProgress from '@mui/material/CircularProgress'
-import { useForm } from 'react-hook-form'
-import { yupResolver } from '@hookform/resolvers/yup'
+import TextField from '@mui/material/TextField'
 import { useRouter } from 'next/navigation'
+import { useForm } from 'react-hook-form'
 
 import { useAuthSchema } from '@/app/(auth)/_hooks'
 import FieldErrorAlert from '@/components/field-error-alert'
-import { LoginPayload } from '@/models'
-import { useAppStore, useLoginMutation } from '@/hooks'
 import { RoutePath } from '@/constants'
-import { setAccessTokenToLS, setRefreshTokenToLS, setUserToLS } from '@/utils'
+import { useAppStore, useLoginMutation } from '@/hooks'
+import { LoginPayload } from '@/models'
 
 export function LoginForm() {
   const router = useRouter()
@@ -32,11 +31,8 @@ export function LoginForm() {
 
   const handleLogin = async (payload: LoginPayload) => {
     const response = await mutateAsync(payload)
-
     setCurrentUser(response.metadata.user)
-    setUserToLS(response.metadata.user)
-    setAccessTokenToLS(response.metadata.accessToken)
-    setRefreshTokenToLS(response.metadata.refreshToken)
+
     router.push(RoutePath.BOARDS)
   }
 

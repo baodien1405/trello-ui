@@ -73,11 +73,7 @@ export function Profiles() {
           aria-haspopup="true"
           aria-expanded={open ? 'true' : undefined}
         >
-          <Avatar
-            sx={{ width: 36, height: 36 }}
-            alt="avatar"
-            src="https://graph.facebook.com/1325702547590327/picture?width=400&height=400"
-          />
+          <Avatar sx={{ width: 36, height: 36 }} alt="avatar" src={currentUser?.avatar} />
         </IconButton>
       </Tooltip>
 

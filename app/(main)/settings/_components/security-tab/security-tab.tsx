@@ -1,25 +1,24 @@
 'use client'
 
-import { useForm } from 'react-hook-form'
-import { toast } from 'react-toastify'
-import Box from '@mui/material/Box'
-import Typography from '@mui/material/Typography'
-import TextField from '@mui/material/TextField'
-import InputAdornment from '@mui/material/InputAdornment'
-import Button from '@mui/material/Button'
-import PasswordIcon from '@mui/icons-material/Password'
-import LockResetIcon from '@mui/icons-material/LockReset'
 import LockIcon from '@mui/icons-material/Lock'
+import LockResetIcon from '@mui/icons-material/LockReset'
 import LogoutIcon from '@mui/icons-material/Logout'
+import PasswordIcon from '@mui/icons-material/Password'
 import { CircularProgress } from '@mui/material'
+import Box from '@mui/material/Box'
+import Button from '@mui/material/Button'
+import InputAdornment from '@mui/material/InputAdornment'
+import TextField from '@mui/material/TextField'
+import Typography from '@mui/material/Typography'
 import { useConfirm } from 'material-ui-confirm'
 import { useRouter } from 'next/navigation'
+import { useForm } from 'react-hook-form'
+import { toast } from 'react-toastify'
 
 import FieldErrorAlert from '@/components/field-error-alert'
-import { UserPayload } from '@/models'
-import { useLogoutMutation, useUpdateUserMutation } from '@/hooks'
 import { RoutePath } from '@/constants'
-import { removeAccessTokenToLS, removeRefreshTokenToLS, removeUserToLS } from '@/utils'
+import { useLogoutMutation, useUpdateUserMutation } from '@/hooks'
+import { UserPayload } from '@/models'
 
 export function SecurityTab() {
   const { mutateAsync: mutateAsyncUpdateUser, isPending: isUserUpdating } = useUpdateUserMutation()
@@ -57,9 +56,6 @@ export function SecurityTab() {
         }).then(() => {
           mutateAsyncLogout().then(() => {
             router.push(RoutePath.LOGIN)
-            removeAccessTokenToLS()
-            removeRefreshTokenToLS()
-            removeUserToLS()
           })
           toast.success('Successfully changed your password, please login again!')
         })

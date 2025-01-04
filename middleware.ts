@@ -11,6 +11,10 @@ export function middleware(request: NextRequest) {
   const accessToken = request.cookies.get(StorageKey.ACCESS_TOKEN)?.value
   const refreshToken = request.cookies.get(StorageKey.REFRESH_TOKEN)?.value
 
+  if (pathname === RoutePath.HOME) {
+    return NextResponse.redirect(new URL(RoutePath.BOARDS, request.url))
+  }
+
   if (privatePaths.some((path) => pathname.startsWith(path)) && !refreshToken) {
     const url = new URL(RoutePath.LOGIN, request.url)
     return NextResponse.redirect(url)
@@ -40,5 +44,5 @@ export function middleware(request: NextRequest) {
   return NextResponse.next()
 }
 export const config = {
-  matcher: ['/login', '/register', '/boards', '/boards/:path*']
+  matcher: ['/', '/login', '/register', '/boards', '/boards/:path*']
 }
