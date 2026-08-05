@@ -6,7 +6,7 @@ const privatePaths = [RoutePath.BOARDS]
 const unAuthPaths = [RoutePath.LOGIN, RoutePath.REGISTER]
 const addEditBoardRegex = /^\/boards\/(add|\d+)$/
 
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl
   const accessToken = request.cookies.get(StorageKey.ACCESS_TOKEN)?.value
   const refreshToken = request.cookies.get(StorageKey.REFRESH_TOKEN)?.value

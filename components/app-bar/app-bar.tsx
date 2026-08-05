@@ -13,7 +13,7 @@ import { useState } from 'react'
 
 import AppsIcon from '@mui/icons-material/Apps'
 import CloseIcon from '@mui/icons-material/Close'
-import HelpOutlineIcon from '@mui/icons-material/HelpOutline'
+import HelpOutlineOutlinedIcon from '@mui/icons-material/HelpOutlineOutlined'
 import LibraryAddIcon from '@mui/icons-material/LibraryAdd'
 import SearchIcon from '@mui/icons-material/Search'
 
@@ -44,18 +44,22 @@ export default function AppBar() {
         }
       }}
     >
-      <Stack direction="row" alignItems="center" gap={2}>
+      <Stack direction="row" sx={{ alignItems: 'center', gap: 2 }}>
         <Link href={RoutePath.BOARDS}>
           <AppsIcon sx={{ color: 'white', verticalAlign: 'middle' }} />
         </Link>
 
         <Link href={RoutePath.HOME}>
-          <Stack direction="row" alignItems="center" gap={0.5}>
+          <Stack direction="row" sx={{ alignItems: 'center', gap: 0.5 }}>
             <SvgIcon fontSize="small" inheritViewBox sx={{ color: 'white' }}>
               <TrelloIcon height="20px" width="20px" />
             </SvgIcon>
 
-            <Typography variant="body2" fontSize="1.2rem" fontWeight="bold" color="white">
+            <Typography
+              variant="body2"
+              color="white"
+              sx={{ fontSize: '1.2rem', fontWeight: 'bold' }}
+            >
               Trello
             </Typography>
           </Stack>
@@ -73,7 +77,7 @@ export default function AppBar() {
         </Button>
       </Stack>
 
-      <Stack direction="row" alignItems="center" gap={2}>
+      <Stack direction="row" sx={{ alignItems: 'center', gap: 2 }}>
         {/* <TextField
           id="outlined-search"
           label="Search"
@@ -120,7 +124,7 @@ export default function AppBar() {
         <Notifications />
 
         <Tooltip title="Help">
-          <HelpOutlineIcon sx={{ cursor: 'pointer', color: 'white' }} />
+          <HelpOutlineOutlinedIcon sx={{ cursor: 'pointer', color: 'white' }} />
         </Tooltip>
 
         <Profiles />

@@ -18,3 +18,10 @@ export const ApiEndpoint = {
   INVITATION_GET_LIST: '/v1/api/invitations',
   INVITATION_BOARD_UPDATE: '/v1/api/invitations/board/{invitationId}'
 }
+
+export const NextApiEndpoint = {
+  AUTH_REGISTER: '/api/auth/register',
+  AUTH_LOGIN: '/api/auth/login',
+  AUTH_LOGOUT: '/api/auth/logout',
+  AUTH_REFRESH_TOKEN: '/api/auth/refresh-token'
+}

@@ -1,7 +1,7 @@
 import axios, { AxiosError, HttpStatusCode } from 'axios'
 import { toast } from 'react-toastify'
 
-import { ApiEndpoint } from '@/constants'
+import { NextApiEndpoint } from '@/constants'
 import { AuthResponse } from '@/models'
 import {
   removeAccessTokenToLS,
@@ -24,12 +24,12 @@ const axiosClient = axios.create({
 axiosClient.interceptors.response.use(
   function (response) {
     const { url } = response.config
-    if (url && [ApiEndpoint.AUTH_LOGIN].includes(url)) {
+    if (url && [NextApiEndpoint.AUTH_LOGIN].includes(url)) {
       const { accessToken, refreshToken, user } = response.data.metadata as AuthResponse
       setAccessTokenToLS(accessToken)
       setRefreshTokenToLS(refreshToken)
       setUserToLS(user)
-    } else if (url === ApiEndpoint.AUTH_LOGOUT) {
+    } else if (url === NextApiEndpoint.AUTH_LOGOUT) {
       removeAccessTokenToLS()
       removeRefreshTokenToLS()
       removeUserToLS()

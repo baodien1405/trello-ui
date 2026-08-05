@@ -68,7 +68,7 @@ export function SearchBoard() {
           size="small"
           slotProps={{
             input: {
-              ...params.InputProps,
+              ...params.slotProps.input,
               startAdornment: (
                 <InputAdornment position="start">
                   <SearchIcon sx={{ color: 'white' }} />
@@ -80,7 +80,7 @@ export function SearchBoard() {
                     {boardListQuery.isLoading ? (
                       <CircularProgress sx={{ color: 'white' }} size={20} />
                     ) : null}
-                    {params.InputProps.endAdornment}
+                    {params.slotProps.input.endAdornment}
                   </InputAdornment>
                 </>
               )

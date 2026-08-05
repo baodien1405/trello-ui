@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import Grid from '@mui/material/Grid2'
+import Grid from '@mui/material/Grid'
 import Typography from '@mui/material/Typography'
 import Stack from '@mui/material/Stack'
 import { Pagination as MUIPagination } from '@mui/material'
@@ -48,7 +48,14 @@ export function BoardList() {
         ))}
 
         {totalPages > 0 && (
-          <Stack alignItems="flex-end" width="100%" my={3} pr={5}>
+          <Stack
+            sx={{
+              alignItems: 'flex-end',
+              width: '100%',
+              my: 3,
+              pr: 5
+            }}
+          >
             <MUIPagination
               size="large"
               color="secondary"
