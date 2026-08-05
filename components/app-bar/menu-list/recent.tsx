@@ -37,8 +37,10 @@ export function Recent() {
         anchorEl={anchorEl}
         open={open}
         onClose={handleClose}
-        MenuListProps={{
-          'aria-labelledby': 'basic-button-recent'
+        slotProps={{
+          list: {
+            'aria-labelledby': 'basic-button-recent'
+          }
         }}
       >
         <MenuItem>

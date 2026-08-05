@@ -41,8 +41,10 @@ export function Starred() {
         anchorEl={anchorEl}
         open={open}
         onClose={handleClose}
-        MenuListProps={{
-          'aria-labelledby': 'basic-button-starred'
+        slotProps={{
+          list: {
+            'aria-labelledby': 'basic-button-starred'
+          }
         }}
       >
         <MenuItem>

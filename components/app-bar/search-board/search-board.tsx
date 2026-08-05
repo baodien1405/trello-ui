@@ -1,14 +1,14 @@
 'use client'
 
-import { SyntheticEvent, useState } from 'react'
+import { useMemo, useState, type SyntheticEvent } from 'react'
 import { useRouter } from 'next/navigation'
 
 import TextField from '@mui/material/TextField'
-import Autocomplete from '@mui/material/Autocomplete'
+import Autocomplete, { type AutocompleteInputChangeReason } from '@mui/material/Autocomplete'
 import CircularProgress from '@mui/material/CircularProgress'
 import InputAdornment from '@mui/material/InputAdornment'
 import SearchIcon from '@mui/icons-material/Search'
-import { debounce } from '@mui/material'
+import { debounce } from '@mui/material/utils'
 
 import { useBoardListQuery } from '@/hooks'
 import { RoutePath } from '@/constants'
@@ -24,15 +24,18 @@ export function SearchBoard() {
   const boardListQuery = useBoardListQuery(filters)
   const boardList = boardListQuery.data?.metadata?.results || []
 
-  const handleInputSearchChange = debounce((event: any) => {
-    const searchValue = event.target?.value
-    if (!searchValue) return
+  const handleInputSearchChange = useMemo(
+    () =>
+      debounce((_event: SyntheticEvent, value: string, reason: AutocompleteInputChangeReason) => {
+        if (reason !== 'input' || !value) return
 
-    setFilters((prevState) => ({
-      ...prevState,
-      'q[title]': searchValue
-    }))
-  }, 350)
+        setFilters((prevState) => ({
+          ...prevState,
+          'q[title]': value
+        }))
+      }, 350),
+    []
+  )
 
   const handleSelectedBoard = (_event: SyntheticEvent, selectedBoard: Board | null) => {
     if (selectedBoard) {
@@ -47,17 +50,11 @@ export function SearchBoard() {
       noOptionsText={boardList.length === 0 ? 'No board found!' : 'Type to search board...'}
       open={open}
       onOpen={() => setOpen(true)}
-      onClose={() => {
-        setOpen(false)
-      }}
-      getOptionLabel={(option) => {
-        return option.title
-      }}
+      onClose={() => setOpen(false)}
+      getOptionLabel={(option) => option.title}
       options={boardList}
-      isOptionEqualToValue={(option, value) => {
-        return option._id === value._id
-      }}
-      loading={boardListQuery.isLoading}
+      isOptionEqualToValue={(option, value) => option._id === value._id}
+      loading={boardListQuery.isFetching}
       onInputChange={handleInputSearchChange}
       onChange={handleSelectedBoard}
       renderInput={(params) => (
@@ -67,6 +64,7 @@ export function SearchBoard() {
           placeholder="Search..."
           size="small"
           slotProps={{
+            ...params.slotProps,
             input: {
               ...params.slotProps.input,
               startAdornment: (
@@ -76,12 +74,10 @@ export function SearchBoard() {
               ),
               endAdornment: (
                 <>
-                  <InputAdornment position="end">
-                    {boardListQuery.isLoading ? (
-                      <CircularProgress sx={{ color: 'white' }} size={20} />
-                    ) : null}
-                    {params.slotProps.input.endAdornment}
-                  </InputAdornment>
+                  {boardListQuery.isFetching ? (
+                    <CircularProgress sx={{ color: 'white' }} size={20} />
+                  ) : null}
+                  {params.slotProps.input.endAdornment}
                 </>
               )
             }

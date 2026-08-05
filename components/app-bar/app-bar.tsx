@@ -2,31 +2,25 @@
 
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
-import InputAdornment from '@mui/material/InputAdornment'
 import Stack from '@mui/material/Stack'
 import SvgIcon from '@mui/material/SvgIcon'
-import TextField from '@mui/material/TextField'
 import Tooltip from '@mui/material/Tooltip'
 import Typography from '@mui/material/Typography'
 import Link from 'next/link'
 import { useState } from 'react'
 
 import AppsIcon from '@mui/icons-material/Apps'
-import CloseIcon from '@mui/icons-material/Close'
 import HelpOutlineOutlinedIcon from '@mui/icons-material/HelpOutlineOutlined'
 import LibraryAddIcon from '@mui/icons-material/LibraryAdd'
-import SearchIcon from '@mui/icons-material/Search'
 
 import { TrelloIcon } from '@/assets'
 import { Notifications } from '@/components/app-bar/notifications'
+import { SearchBoard } from '@/components/app-bar/search-board'
 import ModeSelect from '@/components/mode-select'
 import { RoutePath } from '@/constants'
 import { Profiles, Recent, Starred, Templates, Workspaces } from './menu-list'
-import { SearchBoard } from '@/components/app-bar/search-board'
 
 export default function AppBar() {
-  const [searchValue, setSearchValue] = useState('')
-
   return (
     <Box
       sx={{
@@ -78,45 +72,6 @@ export default function AppBar() {
       </Stack>
 
       <Stack direction="row" sx={{ alignItems: 'center', gap: 2 }}>
-        {/* <TextField
-          id="outlined-search"
-          label="Search"
-          type="text"
-          placeholder="Search..."
-          size="small"
-          value={searchValue}
-          onChange={(e) => setSearchValue(e.target.value)}
-          sx={{
-            minWidth: '120px',
-            maxWidth: '180px',
-            '& label': { color: 'white' },
-            '& input': { color: 'white' },
-            '& label.Mui-focused': { color: 'white' },
-            '& .MuiOutlinedInput-root': {
-              '& fieldset': { borderColor: 'white' },
-              '&:hover fieldset': { borderColor: 'white' },
-              '&.Mui-focused fieldset': { borderColor: 'white' }
-            }
-          }}
-          slotProps={{
-            input: {
-              startAdornment: (
-                <InputAdornment position="start">
-                  <SearchIcon sx={{ color: 'white' }} />
-                </InputAdornment>
-              ),
-              endAdornment: (
-                <InputAdornment position="end" onClick={() => setSearchValue('')}>
-                  <CloseIcon
-                    fontSize="small"
-                    sx={{ color: searchValue ? 'white' : 'transparent' }}
-                  />
-                </InputAdornment>
-              )
-            }
-          }}
-        /> */}
-
         <SearchBoard />
 
         <ModeSelect />

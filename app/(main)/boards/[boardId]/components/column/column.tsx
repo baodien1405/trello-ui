@@ -177,8 +177,10 @@ export function Column({ column }: ColumnProps) {
               open={open}
               onClose={handleClose}
               onClick={handleClose}
-              MenuListProps={{
-                'aria-labelledby': 'basic-column-dropdown'
+              slotProps={{
+                list: {
+                  'aria-labelledby': 'basic-column-dropdown'
+                }
               }}
             >
               <MenuItem

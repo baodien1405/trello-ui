@@ -37,8 +37,10 @@ export function Templates() {
         anchorEl={anchorEl}
         open={open}
         onClose={handleClose}
-        MenuListProps={{
-          'aria-labelledby': 'basic-button-templates'
+        slotProps={{
+          list: {
+            'aria-labelledby': 'basic-button-templates'
+          }
         }}
       >
         <MenuItem>

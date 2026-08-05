@@ -83,8 +83,10 @@ export function Profiles() {
         open={open}
         onClose={handleClose}
         onClick={handleClose}
-        MenuListProps={{
-          'aria-labelledby': 'basic-button-profiles'
+        slotProps={{
+          list: {
+            'aria-labelledby': 'basic-button-profiles'
+          }
         }}
       >
         <Link href={RoutePath.ACCOUNT} style={{ color: 'inherit' }}>

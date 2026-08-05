@@ -107,7 +107,7 @@ export function Notifications() {
           anchorEl={anchorEl}
           open={open}
           onClose={handleClose}
-          MenuListProps={{ 'aria-labelledby': 'basic-button-open-notification' }}
+          slotProps={{ list: { 'aria-labelledby': 'basic-button-open-notification' } }}
         >
           {invitationList.length === 0 && (
             <MenuItem sx={{ minWidth: 200 }}>You do not have any new notifications.</MenuItem>
