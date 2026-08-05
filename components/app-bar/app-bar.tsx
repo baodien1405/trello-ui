@@ -51,8 +51,7 @@ export default function AppBar() {
 
             <Typography
               variant="body2"
-              color="white"
-              sx={{ fontSize: '1.2rem', fontWeight: 'bold' }}
+              sx={{ fontSize: '1.2rem', fontWeight: 'bold', color: 'white' }}
             >
               Trello
             </Typography>

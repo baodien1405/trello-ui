@@ -45,19 +45,37 @@ export default function ModeSelect() {
         }}
       >
         <MenuItem value="light">
-          <Stack direction="row" alignItems="center" gap={1}>
+          <Stack
+            direction="row"
+            sx={{
+              alignItems: 'center',
+              gap: 1
+            }}
+          >
             <LightModeIcon fontSize="small" />
             Light
           </Stack>
         </MenuItem>
         <MenuItem value="dark">
-          <Stack direction="row" alignItems="center" gap={1}>
+          <Stack
+            direction="row"
+            sx={{
+              alignItems: 'center',
+              gap: 1
+            }}
+          >
             <DarkModeIcon fontSize="small" />
             Dark
           </Stack>
         </MenuItem>
         <MenuItem value="system">
-          <Stack direction="row" alignItems="center" gap={1}>
+          <Stack
+            direction="row"
+            sx={{
+              alignItems: 'center',
+              gap: 1
+            }}
+          >
             <SettingsBrightnessIcon fontSize="small" />
             System
           </Stack>

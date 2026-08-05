@@ -50,7 +50,13 @@ export function BoardBar({ board }: BoardBarProps) {
         }
       }}
     >
-      <Stack direction="row" alignItems="center" gap={2}>
+      <Stack
+        direction="row"
+        sx={{
+          alignItems: 'center',
+          gap: 2
+        }}
+      >
         <Tooltip title={board?.description}>
           <Chip sx={MENU_STYLES} icon={<DashboardIcon />} label={board?.title} clickable />
         </Tooltip>
@@ -65,7 +71,13 @@ export function BoardBar({ board }: BoardBarProps) {
         <Chip sx={MENU_STYLES} icon={<FilterListIcon />} label="Filters" clickable />
       </Stack>
 
-      <Stack direction="row" alignItems="center" gap={2}>
+      <Stack
+        direction="row"
+        sx={{
+          alignItems: 'center',
+          gap: 2
+        }}
+      >
         <InviteBoardUser boardId={board._id} />
 
         <BoardUserGroup boardUsers={[...board.owners, ...board.members]} />

@@ -28,7 +28,7 @@ const DEFAULT_CONFIRM_OPTIONS: ConfirmOptions = {
     autoFocus: true,
     sx: { fontFamily: 'inherit' }
   },
-  titleProps: { fontFamily: 'inherit' },
+  titleProps: { sx: { fontFamily: 'inherit' } },
   contentProps: { sx: { '& > p': { fontFamily: 'inherit' } } }
 }
 

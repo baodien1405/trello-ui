@@ -1,9 +1,11 @@
 import { BoardDetail } from '@/app/(main)/boards/[boardId]/components/board-detail'
 
 interface BoardDetailPageProps {
-  params: { boardId: string }
+  params: Promise<{ boardId: string }>
 }
 
-export default function BoardDetailPage({ params }: BoardDetailPageProps) {
-  return <BoardDetail boardId={params.boardId} />
+export default async function BoardDetailPage({ params }: BoardDetailPageProps) {
+  const boardId = (await params).boardId
+
+  return <BoardDetail boardId={boardId} />
 }
