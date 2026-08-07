@@ -4,7 +4,7 @@ import { NextResponse } from 'next/server'
 
 import { ApiEndpoint, StorageKey } from '@/constants'
 
-export async function POST() {
+export async function POST(req: Request) {
   const cookieStore = await cookies()
   const refreshToken = cookieStore.get(StorageKey.REFRESH_TOKEN)?.value
 
@@ -48,7 +48,7 @@ export async function POST() {
     })
 
     return NextResponse.json(jsonResponse)
-  } catch {
+  } catch (error) {
     cookieStore.delete(StorageKey.ACCESS_TOKEN)
     cookieStore.delete(StorageKey.REFRESH_TOKEN)
     return NextResponse.json({ message: 'Refresh failed' }, { status: 401 })

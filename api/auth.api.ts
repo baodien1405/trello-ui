@@ -34,8 +34,12 @@ export const authApi = {
   },
 
   refreshToken(): Promise<SuccessResponse<Omit<AuthResponse, 'user'>>> {
-    return axiosClient.post(NextApiEndpoint.AUTH_REFRESH_TOKEN, {
-      baseURL: process.env.NEXT_PUBLIC_NEXT_SERVER_ENDPOINT
-    })
+    return axiosClient.post(
+      NextApiEndpoint.AUTH_REFRESH_TOKEN,
+      {},
+      {
+        baseURL: process.env.NEXT_PUBLIC_NEXT_SERVER_ENDPOINT
+      }
+    )
   }
 }
