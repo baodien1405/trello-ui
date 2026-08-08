@@ -1,6 +1,5 @@
 import Link from 'next/link'
 import { MouseEvent, useState } from 'react'
-import { toast } from 'react-toastify'
 
 import Logout from '@mui/icons-material/Logout'
 import PersonAdd from '@mui/icons-material/PersonAdd'
@@ -48,7 +47,6 @@ export function Profiles() {
     })
       .then(() => {
         mutateLogout()
-        toast.success('Logout successfully!')
       })
       .catch(() => {})
   }

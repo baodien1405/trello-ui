@@ -5,14 +5,11 @@ import { toast } from 'react-toastify'
 import { NextApiEndpoint } from '@/constants'
 import { AuthResponse } from '@/models'
 import {
-  removeAccessTokenToLS,
-  removeRefreshTokenToLS,
-  removeUserToLS,
-  removeAbsoluteExpToLS,
   setAccessTokenToLS,
   setRefreshTokenToLS,
   setAbsoluteExpToLS,
-  setUserToLS
+  setUserToLS,
+  getAccessTokenFromLS
 } from '@/utils'
 
 const axiosClient = axios.create({
@@ -23,6 +20,17 @@ const axiosClient = axios.create({
   timeout: 10 * 60 * 1000,
   withCredentials: true
 })
+
+axiosClient.interceptors.request.use(
+  (config) => {
+    const accessToken = getAccessTokenFromLS()
+    if (accessToken) {
+      config.headers.Authorization = `Bearer ${accessToken}`
+    }
+    return config
+  },
+  (error) => Promise.reject(error)
+)
 
 axiosClient.interceptors.response.use(
   function (response) {
