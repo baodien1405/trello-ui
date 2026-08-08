@@ -13,13 +13,13 @@ export const authApi = {
     payload: Omit<RegisterPayload, 'confirm_password'>
   ): Promise<SuccessResponse<AuthResponse>> {
     return axiosClient.post(NextApiEndpoint.AUTH_REGISTER, payload, {
-      baseURL: process.env.NEXT_PUBLIC_NEXT_SERVER_ENDPOINT
+      baseURL: ''
     })
   },
 
   login(payload: LoginPayload): Promise<SuccessResponse<AuthResponse>> {
     return axiosClient.post(NextApiEndpoint.AUTH_LOGIN, payload, {
-      baseURL: process.env.NEXT_PUBLIC_NEXT_SERVER_ENDPOINT
+      baseURL: ''
     })
   },
 
@@ -29,7 +29,7 @@ export const authApi = {
 
   logout(): Promise<SuccessResponse<any>> {
     return axiosClient.delete(NextApiEndpoint.AUTH_LOGOUT, {
-      baseURL: process.env.NEXT_PUBLIC_NEXT_SERVER_ENDPOINT
+      baseURL: ''
     })
   },
 
@@ -38,7 +38,7 @@ export const authApi = {
       NextApiEndpoint.AUTH_REFRESH_TOKEN,
       {},
       {
-        baseURL: process.env.NEXT_PUBLIC_NEXT_SERVER_ENDPOINT
+        baseURL: ''
       }
     )
   }
