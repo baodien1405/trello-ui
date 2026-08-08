@@ -1,7 +1,8 @@
 {
   "name": "trello-ui",
-  "version": "3.1.0",
+  "version": "3.1.1",
   "private": true,
+  "packageManager": "pnpm@10.18.1",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
