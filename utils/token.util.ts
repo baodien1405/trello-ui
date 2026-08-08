@@ -5,10 +5,13 @@ import { authApi } from '@/api'
 import {
   getAccessTokenFromLS,
   getRefreshTokenFromLS,
+  getAbsoluteExpFromLS,
   removeAccessTokenToLS,
   removeRefreshTokenToLS,
+  removeAbsoluteExpToLS,
   setAccessTokenToLS,
-  setRefreshTokenToLS
+  setRefreshTokenToLS,
+  setAbsoluteExpToLS
 } from '@/utils/localstorage.utils'
 
 interface TokenPayload {
@@ -35,11 +38,17 @@ export const checkAndRefreshToken = async (params?: {
   const COOKIE_SET_DELAY_SECONDS = 1
   const now = new Date().getTime() / 1000 - COOKIE_SET_DELAY_SECONDS
 
-  const isExpiredRefreshToken = decodeRefreshToken.exp <= now
+  let absoluteExp = getAbsoluteExpFromLS()
 
-  if (isExpiredRefreshToken) {
+  if (!absoluteExp) {
+    absoluteExp = decodeRefreshToken.exp
+    setAbsoluteExpToLS(absoluteExp)
+  }
+
+  if (absoluteExp <= now || decodeRefreshToken.exp <= now) {
     removeAccessTokenToLS()
     removeRefreshTokenToLS()
+    removeAbsoluteExpToLS()
 
     if (params?.onError) {
       params.onError()

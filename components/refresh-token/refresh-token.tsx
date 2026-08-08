@@ -4,7 +4,7 @@ import { useEffect } from 'react'
 import { usePathname, useRouter } from 'next/navigation'
 
 import { RoutePath } from '@/constants'
-import { useAppStore } from '@/hooks'
+import { useAppStore, useLogoutMutation } from '@/hooks'
 import { checkAndRefreshToken } from '@/utils'
 
 const UNAUTHENTICATED_PATH_LIST: string[] = [
@@ -13,12 +13,16 @@ const UNAUTHENTICATED_PATH_LIST: string[] = [
   RoutePath.REFRESH_TOKEN
 ]
 
-const TIME_REFRESH_TOKEN = 1000 * 60 * 2
+// access token: 1 day, refresh token: 7 days
+// exp = 1h => set TIME_REFRESH_TOKEN = 1000 * 60 * 2
+// exp = 24h => set TIME_REFRESH_TOKEN = 1000 * 60 * 48
+const TIME_REFRESH_TOKEN = 1000 * 60 * 48
 
 export default function RefreshToken() {
   const router = useRouter()
   const pathname = usePathname()
   const setCurrentUser = useAppStore((state) => state.setCurrentUser)
+  const { mutate: mutateLogout } = useLogoutMutation()
 
   useEffect(() => {
     if (UNAUTHENTICATED_PATH_LIST.includes(pathname)) return
@@ -29,8 +33,7 @@ export default function RefreshToken() {
       checkAndRefreshToken({
         onError: () => {
           clearInterval(interval)
-          setCurrentUser(null)
-          router.push(RoutePath.LOGIN)
+          mutateLogout()
         },
         force
       })

@@ -1,5 +1,7 @@
 export const StorageKey = {
   ACCESS_TOKEN: 'accessToken',
   REFRESH_TOKEN: 'refreshToken',
-  USER: 'user'
+  USER: 'user',
+  ABSOLUTE_EXP: 'absoluteExp'
 }
+

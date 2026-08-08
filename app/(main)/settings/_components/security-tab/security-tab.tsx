@@ -11,19 +11,16 @@ import InputAdornment from '@mui/material/InputAdornment'
 import TextField from '@mui/material/TextField'
 import Typography from '@mui/material/Typography'
 import { useConfirm } from 'material-ui-confirm'
-import { useRouter } from 'next/navigation'
 import { useForm } from 'react-hook-form'
 import { toast } from 'react-toastify'
 
 import FieldErrorAlert from '@/components/field-error-alert'
-import { RoutePath } from '@/constants'
 import { useLogoutMutation, useUpdateUserMutation } from '@/hooks'
 import { UserPayload } from '@/models'
 
 export function SecurityTab() {
   const { mutateAsync: mutateAsyncUpdateUser, isPending: isUserUpdating } = useUpdateUserMutation()
-  const { mutateAsync: mutateAsyncLogout, isPending: isLoggingOut } = useLogoutMutation()
-  const router = useRouter()
+  const { mutate: mutateLogout, isPending: isLoggingOut } = useLogoutMutation()
 
   const {
     register,
@@ -54,9 +51,7 @@ export function SecurityTab() {
           current_password,
           new_password
         }).then(() => {
-          mutateAsyncLogout().then(() => {
-            router.push(RoutePath.LOGIN)
-          })
+          mutateLogout()
           toast.success('Successfully changed your password, please login again!')
         })
       })

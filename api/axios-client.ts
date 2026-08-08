@@ -1,4 +1,5 @@
 import axios, { AxiosError, HttpStatusCode } from 'axios'
+import { jwtDecode } from 'jwt-decode'
 import { toast } from 'react-toastify'
 
 import { NextApiEndpoint } from '@/constants'
@@ -7,8 +8,10 @@ import {
   removeAccessTokenToLS,
   removeRefreshTokenToLS,
   removeUserToLS,
+  removeAbsoluteExpToLS,
   setAccessTokenToLS,
   setRefreshTokenToLS,
+  setAbsoluteExpToLS,
   setUserToLS
 } from '@/utils'
 
@@ -29,10 +32,12 @@ axiosClient.interceptors.response.use(
       setAccessTokenToLS(accessToken)
       setRefreshTokenToLS(refreshToken)
       setUserToLS(user)
-    } else if (url === NextApiEndpoint.AUTH_LOGOUT) {
-      removeAccessTokenToLS()
-      removeRefreshTokenToLS()
-      removeUserToLS()
+
+      const decoded = jwtDecode<{ exp: number }>(refreshToken)
+
+      if (decoded?.exp) {
+        setAbsoluteExpToLS(decoded.exp)
+      }
     }
     return response.data
   },

@@ -40,3 +40,17 @@ export const setUserToLS = (user: User) => {
 export const removeUserToLS = () => {
   localStorage.removeItem(StorageKey.USER)
 }
+
+export const getAbsoluteExpFromLS = () => {
+  const expStr = localStorage.getItem(StorageKey.ABSOLUTE_EXP)
+  return expStr ? Number(expStr) : null
+}
+
+export const setAbsoluteExpToLS = (exp: number) => {
+  localStorage.setItem(StorageKey.ABSOLUTE_EXP, exp.toString())
+}
+
+export const removeAbsoluteExpToLS = () => {
+  localStorage.removeItem(StorageKey.ABSOLUTE_EXP)
+}
+
