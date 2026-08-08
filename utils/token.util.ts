@@ -5,7 +5,10 @@ import { authApi } from '@/api'
 import {
   getAccessTokenFromLS,
   getRefreshTokenFromLS,
-  setAccessTokenToLS
+  removeAccessTokenToLS,
+  removeRefreshTokenToLS,
+  setAccessTokenToLS,
+  setRefreshTokenToLS
 } from '@/utils/localstorage.utils'
 
 interface TokenPayload {
@@ -13,6 +16,8 @@ interface TokenPayload {
   exp: number
   iat: number
 }
+
+let refreshTokenCount = 0
 
 export const checkAndRefreshToken = async (params?: {
   force?: boolean
@@ -33,7 +38,8 @@ export const checkAndRefreshToken = async (params?: {
   const isExpiredRefreshToken = decodeRefreshToken.exp <= now
 
   if (isExpiredRefreshToken) {
-    await authApi.logout()
+    removeAccessTokenToLS()
+    removeRefreshTokenToLS()
 
     if (params?.onError) {
       params.onError()
@@ -47,9 +53,15 @@ export const checkAndRefreshToken = async (params?: {
 
   if (params?.force || remainingAccessTokenTime < validAccessTokenDuration / 3) {
     try {
+      if (refreshTokenCount > 0) return
+
+      refreshTokenCount++
+
       const response = await authApi.refreshToken()
+
       setAccessTokenToLS(response.metadata.accessToken)
-      setAccessTokenToLS(response.metadata.refreshToken)
+      setRefreshTokenToLS(response.metadata.refreshToken)
+
       if (params?.onSuccess) {
         params.onSuccess()
       }
@@ -57,6 +69,8 @@ export const checkAndRefreshToken = async (params?: {
       if (params?.onError) {
         params.onError()
       }
+    } finally {
+      refreshTokenCount = 0
     }
   }
 }

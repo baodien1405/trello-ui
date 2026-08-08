@@ -13,7 +13,7 @@ export function RefreshToken() {
   const redirectPath = searchParams?.get('redirect')
 
   useEffect(() => {
-    if (refreshTokenFromUrl && refreshTokenFromUrl === getRefreshTokenFromLS()) {
+    if (refreshTokenFromUrl === getRefreshTokenFromLS()) {
       checkAndRefreshToken({
         onSuccess: () => {
           router.push(redirectPath || RoutePath.HOME)
